@@ -1,0 +1,43 @@
+<section class="painel painel-gestor">
+  <h2>Painel da prefeitura</h2>
+  <p>Indicadores e ocorrências do município da sua conta.</p>
+  <div class="filtros-gestor">
+    <label>Categoria<select [(ngModel)]="filtros.categoriaId"><option value="">Todas</option>
+      @for(c of categorias(); track c.id){<option [value]="c.id">{{c.nome}}</option>}</select></label>
+    <label>Status<select [(ngModel)]="filtros.status"><option value="">Todos</option>
+      <option value="pendente">Pendente</option><option value="em_analise">Em análise</option>
+      <option value="em_andamento">Em andamento</option><option value="resolvida">Resolvida</option>
+      <option value="rejeitada">Rejeitada</option></select></label>
+    <label>Bairro<input [(ngModel)]="filtros.bairro" placeholder="Todos os bairros" /></label>
+    <label>De<input type="date" [(ngModel)]="filtros.inicio" /></label>
+    <label>Até<input type="date" [(ngModel)]="filtros.fim" /></label>
+  </div>
+  <div class="acoes-gestor"><button (click)="carregar()" [disabled]="carregando()">Aplicar filtros</button>
+    <button class="secundario" (click)="exportar()">Exportar relatório CSV</button></div>
+  @if(erro()){<p role="alert">{{erro()}}</p>}
+  @if(carregando()){<p>Carregando indicadores...</p>}
+  @if(dados(); as d){
+    <div class="metricas">
+      <article><span>Total</span><strong>{{d.resumo.total}}</strong></article>
+      <article><span>Pendentes</span><strong>{{d.resumo.pendentes}}</strong></article>
+      <article><span>Em andamento</span><strong>{{d.resumo.emAndamento}}</strong></article>
+      <article><span>Resolvidas</span><strong>{{d.resumo.resolvidas}}</strong></article>
+    </div>
+    <div class="graficos">
+      <section><h3>Por categoria</h3><div class="area-grafico"><canvas #graficoCategoria></canvas></div></section>
+      <section><h3>Evolução mensal</h3><div class="area-grafico"><canvas #graficoEvolucao></canvas></div></section>
+    </div>
+    <h3>Ocorrências por região (bairro)</h3>
+    <div class="tabela-rolagem"><table><thead><tr><th>Bairro</th><th>Total</th></tr></thead><tbody>
+      @for(b of d.bairros; track b.nome){<tr><td>{{b.nome}}</td><td>{{b.total}}</td></tr>}
+      @empty{<tr><td colspan="2">Nenhum registro</td></tr>}
+    </tbody></table></div>
+    <h3>Mapa de calor</h3><div #mapaCalor class="mapa-calor"></div>
+    <small>Mapa de calor baseado nas coordenadas das últimas 2.000 ocorrências que atendem aos filtros.</small>
+  }
+  <h3>Histórico de alterações de status</h3>
+  <div class="tabela-rolagem"><table><thead><tr><th>Ocorrência</th><th>Anterior</th><th>Novo</th><th>Gestor</th><th>Data</th></tr></thead><tbody>
+    @for(h of historico(); track h.id){<tr><td>#{{h.ocorrenciaId}}</td><td>{{h.anterior.replaceAll('_',' ')}}</td><td>{{h.novo.replaceAll('_',' ')}}</td><td>{{h.gestor}}</td><td>{{h.alteradoEm | date:'dd/MM/yyyy HH:mm'}}</td></tr>}
+    @empty{<tr><td colspan="5">Nenhuma alteração registrada</td></tr>}
+  </tbody></table></div>
+</section>

@@ -1,0 +1,18 @@
+# Local environment variables (keep the example file)
+**/.env
+**/.env.*
+!**/.env.example
+
+# Installed dependencies and generated output
+**/node_modules/
+**/dist/
+**/.angular/
+
+# User-uploaded files (created automatically by the backend)
+/backend/uploads/*
+!/backend/uploads/.gitkeep
+
+# Logs and OS files
+*.log
+.DS_Store
+Thumbs.db

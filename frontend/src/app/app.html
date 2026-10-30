@@ -1,0 +1,70 @@
+<header><div class="container topo"><div class="logo">🐱 Neko<span>Urban</span></div><span class="fase">MVP · Etapa 5</span></div></header>
+<main class="container">
+  @if (auth.usuario(); as usuario) {
+    <section class="area"><div class="area-topo"><div><span class="tag">{{ usuario.perfil === 'gestor' ? 'Gestor' : 'Cidadão' }}</span><h1>Olá, {{ usuario.nome }}!</h1><p>Registre e acompanhe problemas urbanos do seu município.</p></div><button class="secundario" (click)="sair()">Sair</button></div>
+      <nav class="abas" aria-label="Áreas da plataforma"><button [class.ativo]="aba() === 'lista'" (click)="selecionarAba('lista')">Mapa de ocorrências</button><button [class.ativo]="aba() === 'registrar'" (click)="selecionarAba('registrar')">Registrar ocorrência</button><button [class.ativo]="aba() === 'minhas'" (click)="selecionarAba('minhas')">Minhas ocorrências</button><button [class.ativo]="aba() === 'avisos'" (click)="selecionarAba('avisos')">Notificações</button>@if(usuario.perfil === 'gestor'){<button [class.ativo]="aba() === 'gestor'" (click)="selecionarAba('gestor')">Painel do gestor</button>}</nav>
+      @if (aba() === 'gestor' && usuario.perfil === 'gestor') {<app-painel-gestor [categorias]="categorias()" />} @else if (aba() === 'avisos') {
+        <section class="painel"><h2>Notificações</h2><button (click)="carregarNotificacoes()">Atualizar avisos</button>
+        @for(n of notificacoes(); track n.id) {
+          <article class="ocorrencia"><strong>{{ n.lida ? 'Lida' : 'Nova' }} · Ocorrência #{{ n.ocorrenciaId }}</strong>
+          <p>{{ n.mensagem }}</p><small>{{ n.criadaEm | date:'dd/MM/yyyy HH:mm' }}</small>
+          @if(!n.lida){<button (click)="lerNotificacao(n.id)">Marcar como lida</button>}</article>
+        } @empty {<p>Você não tem notificações.</p>}</section>
+      } @else if (aba() === 'registrar') {
+        <section class="painel"><h2>Nova ocorrência</h2><p>Selecione o local clicando no mapa.</p>
+          <app-mapa [selecionavel]="true" (posicao)="marcarPosicao($event)" />
+          <p class="suave">Local: {{ latitude === null ? 'Ainda não selecionado' : latitude.toFixed(5) + ', ' + longitude?.toFixed(5) }}</p>
+          <form (ngSubmit)="registrar()" #registro="ngForm">
+            <label for="categoria">Categoria</label><select id="categoria" name="categoria" [(ngModel)]="categoriaId" required>@for(c of categorias(); track c.id){<option [ngValue]="c.id">{{ c.nome }}</option>}</select>
+            <label for="descricao">Descrição</label><textarea id="descricao" name="descricao" [(ngModel)]="descricao" required minlength="10" maxlength="2000" rows="4" placeholder="Descreva o problema..."></textarea>
+            <label for="bairro">Bairro (opcional)</label><input id="bairro" name="bairro" [(ngModel)]="bairro" maxlength="120" />
+            <label for="endereco">Endereço de referência (opcional)</label><input id="endereco" name="endereco" [(ngModel)]="endereco" maxlength="300" />
+            <label for="foto">Foto (opcional, até 5 MB)</label><input id="foto" type="file" accept="image/jpeg,image/png,image/webp" (change)="selecionarFoto($event)" />
+            <button [disabled]="registro.invalid || carregando() || latitude === null">{{ carregando() ? 'Enviando...' : 'Registrar ocorrência' }}</button>
+          </form>
+        </section>
+      } @else {
+        <section class="painel"><h2>{{ aba() === 'minhas' ? 'Minhas ocorrências' : 'Ocorrências no mapa' }}</h2>
+          @if (aba() === 'lista') {
+            <div class="filtros"><select aria-label="Filtrar categoria" [(ngModel)]="filtroCategoria"><option value="">Todas as categorias</option>@for(c of categorias();track c.id){<option [value]="c.id">{{ c.nome }}</option>}</select>
+            <select aria-label="Filtrar status" [(ngModel)]="filtroStatus"><option value="">Todos os status</option><option value="pendente">Pendente</option><option value="em_analise">Em análise</option><option value="em_andamento">Em andamento</option><option value="resolvida">Resolvida</option><option value="rejeitada">Rejeitada</option></select>
+            <input aria-label="Filtrar bairro" placeholder="Bairro" [(ngModel)]="filtroBairro" /><button (click)="listar()">Filtrar</button></div>
+            <app-mapa [ocorrencias]="ocorrencias()" />
+          }
+          <div class="cartoes">@for(o of (aba() === 'minhas' ? minhas() : ocorrencias()); track o.id){<article class="ocorrencia"><div class="ocorrencia-topo"><strong>#{{ o.id }} · {{ o.categoria }}</strong><span class="status">{{ o.status.replaceAll('_',' ') }}</span></div><p>{{ o.descricao }}</p><p class="suave">{{ o.bairro || o.endereco || 'Local marcado no mapa' }} · {{ o.criadaEm | date:'dd/MM/yyyy HH:mm' }}</p>@if(o.foto){<img class="foto" [src]="'http://localhost:3000' + o.foto" alt="Foto da ocorrência" />}<div class="acoes-ocorrencia">
+            <button (click)="apoiar(o.id)">Apoiar</button>
+            <button class="secundario" (click)="removerApoio(o.id)">Retirar apoio</button>
+            <button class="secundario" (click)="abrirComentarios(o.id)">Comentários</button>
+          </div>
+          @if(ocorrenciaAberta() === o.id) {
+            <div class="comentarios"><h3>Comentários</h3>
+            @for(c of comentarios(); track c.id){<p><strong>{{ c.autor }}:</strong> {{ c.texto }} <small>{{ c.criadoEm | date:'dd/MM/yyyy' }}</small></p>}
+            <form (ngSubmit)="comentar(o.id)">
+              <label [for]="'texto-' + o.id">Escreva seu comentário</label>
+              <textarea [id]="'texto-' + o.id" name="textoComentario" [(ngModel)]="textoComentario" minlength="2" maxlength="1000" required></textarea>
+              <button [disabled]="textoComentario.trim().length < 2">Publicar comentário</button>
+            </form></div>
+          }
+          @if(usuario.perfil === 'gestor') {
+            <div class="acoes-ocorrencia"><label [for]="'status-' + o.id">Alterar status</label>
+            <select [id]="'status-' + o.id" [(ngModel)]="statusNovo">
+              <option value="pendente">Pendente</option><option value="em_analise">Em análise</option>
+              <option value="em_andamento">Em andamento</option><option value="resolvida">Resolvida</option>
+              <option value="rejeitada">Rejeitada</option>
+            </select><button (click)="atualizarStatus(o.id)">Salvar status</button></div>
+          }
+          </article>} @empty {<p>Nenhuma ocorrência encontrada.</p>}</div>
+        </section>
+      }
+    </section>
+  } @else {
+    <div class="layout"><section class="apresentacao"><span class="tag">Projeto piloto · Sorocaba/SP</span><h1>Uma cidade melhor começa com você.</h1><p>Registre problemas urbanos e acompanhe o andamento pelo mapa.</p></section>
+    <section class="painel"><div class="abas"><button [class.ativo]="tela() === 'login'" (click)="mudarTela('login')">Entrar</button><button [class.ativo]="tela() === 'cadastro'" (click)="mudarTela('cadastro')">Criar conta</button></div><h2>{{ tela() === 'login' ? 'Acesse sua conta' : 'Cadastro de cidadão' }}</h2>
+    <form (ngSubmit)="enviar()" #form="ngForm">@if(tela() === 'cadastro'){<label for="nome">Nome</label><input id="nome" name="nome" [(ngModel)]="nome" required minlength="2" />}
+    <label for="email">E-mail</label><input id="email" type="email" name="email" [(ngModel)]="email" required email />
+    <label for="senha">Senha</label><input id="senha" type="password" name="senha" [(ngModel)]="senha" [minlength]="tela() === 'cadastro' ? 10 : 1" required />
+    @if(tela() === 'cadastro'){<label for="municipio">Município</label><select id="municipio" name="municipio" [(ngModel)]="municipioId" required>@for(m of municipios();track m.id){<option [ngValue]="m.id">{{m.nome}} - {{m.uf}}</option>}</select>}
+    <button [disabled]="form.invalid || carregando()">{{ carregando() ? 'Aguarde...' : (tela() === 'login' ? 'Entrar' : 'Criar conta') }}</button></form></section></div>
+  }
+  @if(mensagem()){<p class="resultado" role="status">{{ mensagem() }}</p>}
+</main><footer class="container">NekoUrban · Projeto acadêmico · Etapa 5</footer>
