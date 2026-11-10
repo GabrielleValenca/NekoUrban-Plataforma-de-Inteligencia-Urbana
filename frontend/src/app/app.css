@@ -1034,3 +1034,383 @@ main.container:has(.landing) {
     font-size: 38px;
   }
 }
+
+/* =====================================
+   NEKOURBAN - IMAGENS DAS REFERENCIAS
+===================================== */
+
+/* LOGO */
+.lp-logo-imagem {
+  width: 48px;
+  height: 48px;
+  object-fit: contain;
+}
+
+.lp-logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.lp-logo span {
+  color: #12332c;
+}
+
+.lp-final-logo img {
+  width: 85px;
+  height: 85px;
+  object-fit: contain;
+}
+
+.rodape-logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.rodape-logo img {
+  width: 38px;
+  height: 38px;
+  object-fit: contain;
+}
+
+/* HOME */
+.hero-imagem {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: auto;
+  background: transparent;
+}
+
+.imagem-home {
+  display: block;
+  width: 100%;
+  max-width: 570px;
+  height: auto;
+  object-fit: contain;
+  border-radius: 28px;
+}
+
+/* SOBRE O PROJETO */
+.sobre-imagem {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.sobre-imagem img {
+  display: block;
+  width: 100%;
+  max-width: 650px;
+  height: auto;
+  object-fit: contain;
+}
+
+/* MAPA DO CELULAR */
+.celular-mapa {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 92px;
+  overflow: hidden;
+  border-radius: 14px;
+  background-color: #e6eee0;
+
+  background-image:
+    linear-gradient(25deg, transparent 46%, #fff 47%, #fff 51%, transparent 52%),
+    linear-gradient(110deg, transparent 42%, #fff 43%, #fff 47%, transparent 48%),
+    linear-gradient(165deg, transparent 62%, #fff 63%, #fff 67%, transparent 68%),
+    linear-gradient(75deg, transparent 25%, #fff 26%, #fff 30%, transparent 31%);
+  background-size: 110px 85px, 130px 90px, 150px 100px, 120px 90px;
+}
+
+.mapa-pin {
+  position: absolute;
+  width: 13px;
+  height: 13px;
+  border: 3px solid white;
+  border-radius: 50%;
+  background: #398b53;
+  box-shadow: 0 1px 5px #12332c55;
+}
+
+.pin-um {
+  top: 25px;
+  left: 25%;
+}
+
+.pin-dois {
+  top: 53px;
+  left: 53%;
+}
+
+.pin-tres {
+  top: 20px;
+  left: 78%;
+}
+
+/* DIFERENCIAL */
+.diferencial-imagem {
+  width: 100%;
+  margin: 40px auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.diferencial-imagem img {
+  display: block;
+  width: 100%;
+  max-width: 850px;
+  height: auto;
+  object-fit: contain;
+}
+
+/* RESPONSIVIDADE */
+@media (max-width: 600px) {
+  .lp-logo-imagem {
+    width: 40px;
+    height: 40px;
+  }
+
+  .imagem-home {
+    border-radius: 18px;
+  }
+
+  .sobre-imagem img {
+    width: 100%;
+  }
+
+  .diferencial-imagem {
+    margin: 25px auto;
+  }
+}
+
+
+/* ==========================================
+   CORREÇÃO DE ALINHAMENTO - NEKOURBAN
+   ========================================== */
+
+/* Evita que os estilos antigos interfiram na landing */
+.landing {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  margin: 0 auto;
+}
+
+.landing > section {
+  width: 100%;
+}
+
+/* O container deve centralizar o conteúdo */
+.landing .lp-container {
+  width: min(1248px, calc(100% - 64px));
+  max-width: 1248px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* HERO: o grid fica somente nos elementos internos */
+.landing .hero {
+  display: block;
+  width: 100%;
+}
+
+.landing .hero-grid {
+  display: grid;
+  grid-template-columns: 0.95fr 1.05fr;
+  align-items: center;
+  justify-content: center;
+  gap: 55px;
+}
+
+.landing .hero-conteudo {
+  min-width: 0;
+}
+
+.landing .hero-imagem {
+  width: 100%;
+  min-width: 0;
+}
+
+/* SOBRE */
+.landing .sobre-grid {
+  display: grid;
+  grid-template-columns: 1fr 1.1fr;
+  align-items: center;
+  gap: 65px;
+}
+
+.landing .sobre-texto,
+.landing .sobre-imagem {
+  min-width: 0;
+}
+
+/* COMO FUNCIONA */
+.landing .funciona-grid {
+  display: grid;
+  grid-template-columns: 1.15fr 0.85fr;
+  align-items: center;
+  gap: 65px;
+}
+
+.landing .funciona-texto,
+.landing .celular-area {
+  min-width: 0;
+}
+
+/* DIFERENCIAIS: a seção inteira NÃO deve ser um grid */
+.landing section.diferenciais {
+  display: block;
+  width: 100%;
+}
+
+.landing .diferenciais > .lp-container {
+  display: block;
+}
+
+.landing .diferenciais-intro {
+  max-width: 750px;
+  margin: 0 0 30px;
+}
+
+.landing .diferencial-imagem {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+.landing .cards-diferenciais {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 22px;
+  width: 100%;
+  margin-top: 45px;
+}
+
+.landing .card-diferencial {
+  min-width: 0;
+}
+
+/* CHAMADA FINAL */
+.landing .lp-final-conteudo {
+  width: min(850px, calc(100% - 36px));
+  margin: 0 auto;
+}
+
+/* RODAPÉ */
+.landing .rodape-grid {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr 1.2fr 1.2fr;
+  gap: 35px;
+  align-items: start;
+}
+
+/* TABLETS */
+@media (max-width: 900px) {
+  .landing .lp-container {
+    width: calc(100% - 48px);
+  }
+
+  .landing .hero-grid,
+  .landing .sobre-grid,
+  .landing .funciona-grid {
+    grid-template-columns: 1fr;
+    gap: 35px;
+  }
+
+  .landing .hero-imagem {
+    max-width: 650px;
+    margin: 0 auto;
+  }
+
+  .landing .cards-diferenciais {
+    grid-template-columns: 1fr;
+  }
+
+  .landing .rodape-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+/* CELULARES */
+@media (max-width: 600px) {
+  .landing .lp-container {
+    width: calc(100% - 36px);
+  }
+
+  .landing .hero-grid,
+  .landing .sobre-grid,
+  .landing .funciona-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .landing .rodape-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .landing .cards-diferenciais {
+    grid-template-columns: 1fr;
+  }
+}
+
+
+
+/* DIFERENCIAL - TEXTO E IMAGEM LADO A LADO */
+
+.landing section.diferenciais {
+  display: block !important;
+}
+
+.landing .diferenciais-layout {
+  display: grid !important;
+  grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr) !important;
+  align-items: center;
+  gap: 40px;
+  margin-top: 35px;
+}
+
+.landing .diferenciais-texto {
+  min-width: 0;
+  max-width: 520px;
+}
+
+.landing .diferencial-imagem {
+  min-width: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.landing .diferencial-imagem img {
+  display: block;
+  width: 100%;
+  max-width: 520px;
+  height: auto;
+  object-fit: contain;
+}
+
+.landing .cards-diferenciais {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 22px;
+  margin-top: 45px;
+}
+
+@media (max-width: 768px) {
+  .landing .diferenciais-layout {
+    grid-template-columns: 1fr !important;
+  }
+
+  .landing .diferenciais-imagem img {
+    max-width: 450px;
+  }
+
+  .landing .cards-diferenciais {
+    grid-template-columns: 1fr;
+  }
+}

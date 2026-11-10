@@ -79,8 +79,12 @@
     <!-- MENU -->
     <nav class="landing-nav">
       <a href="#inicio" class="lp-logo">
-        <span class="lp-gato">♧</span>
-        Neko<span>Urban</span>
+        <img
+          src="/assets/logo-nekourban.png"
+          alt="Símbolo do NekoUrban"
+          class="lp-logo-imagem"
+        />
+        <span>NekoUrban</span>
       </a>
 
       <div class="landing-links">
@@ -118,12 +122,13 @@
           </button>
         </div>
 
-        <div class="hero-imagem">
-          <img
-            src="/assets/dashboard-nekourban.png"
-            alt="Painel de inteligência urbana do NekoUrban com mapa e indicadores"
-          />
-        </div>
+      <div class="hero-imagem">
+        <img
+          src="/assets/home-comunidade.png"
+          alt="Pessoas contemplando uma cidade arborizada"
+          class="imagem-home"
+        />
+      </div>
       </div>
     </section>
 
@@ -151,15 +156,12 @@
           </p>
         </div>
 
-        <div class="cidade-visual">
-          <div class="cidade-sol"></div>
-          <div class="cidade-predios">
-            <span></span><span></span><span></span>
-            <span></span><span></span><span></span>
-          </div>
-          <div class="cidade-arvores">🌳 🌳 🌳</div>
-          <span class="cidade-legenda">Cidades melhores começam com participação.</span>
-        </div>
+        <div class="sobre-imagem">
+        <img
+          src="/assets/sobre-mapa.png"
+          alt="Notebook exibindo o mapa urbano de Sorocaba"
+        />
+      </div>
       </div>
     </section>
 
@@ -228,9 +230,9 @@
             </div>
 
             <div class="celular-mapa">
-              <span>📍</span>
-              <span>📍</span>
-              <span>📍</span>
+              <span class="mapa-pin pin-um"></span>
+              <span class="mapa-pin pin-dois"></span>
+              <span class="mapa-pin pin-tres"></span>
             </div>
 
             <div class="celular-enviar">Registrar ocorrência</div>
@@ -240,10 +242,15 @@
     </section>
 
     <!-- DIFERENCIAIS -->
-    <section class="lp-secao diferenciais" id="diferenciais">
-      <div class="lp-container">
-        <span class="lp-etiqueta">03 / O DIFERENCIAL DA SOLUÇÃO</span>
+    
+<section class="lp-secao diferenciais" id="diferenciais">
+  <div class="lp-container">
 
+    <span class="lp-etiqueta">03 / O DIFERENCIAL DA SOLUÇÃO</span>
+
+    <div class="diferenciais-layout">
+
+      <div class="diferenciais-texto">
         <h2>Mais do que registrar é enxergar a cidade.</h2>
 
         <p class="diferenciais-intro">
@@ -252,39 +259,54 @@
           mais atenção e como essas informações podem apoiar decisões
           de manutenção urbana.
         </p>
-
-        <div class="cards-diferenciais">
-          <article class="card-diferencial">
-            <div class="icone-diferencial">▤</div>
-            <h3>Menos duplicidade</h3>
-            <p>
-              Ocorrências semelhantes podem ser apoiadas em vez de repetidas.
-            </p>
-          </article>
-
-          <article class="card-diferencial">
-            <div class="icone-diferencial">⌖</div>
-            <h3>Mais contexto</h3>
-            <p>
-              Localização, imagem e histórico ajudam a compreender cada situação.
-            </p>
-          </article>
-
-          <article class="card-diferencial">
-            <div class="icone-diferencial">▥</div>
-            <h3>Mais clareza</h3>
-            <p>
-              Mapas e indicadores tornam visíveis as áreas prioritárias da cidade.
-            </p>
-          </article>
-        </div>
       </div>
-    </section>
+
+      <div class="diferencial-imagem">
+        <img
+          src="/assets/diferencial-painel.png"
+          alt="Painel de inteligência urbana com mapa, indicadores e regiões prioritárias"
+        />
+      </div>
+
+    </div>
+
+    <div class="cards-diferenciais">
+
+      <article class="card-diferencial">
+        <div class="icone-diferencial">▤</div>
+        <h3>Menos duplicidade</h3>
+        <p>
+          Ocorrências semelhantes podem ser apoiadas em vez de repetidas.
+        </p>
+      </article>
+
+      <article class="card-diferencial">
+        <div class="icone-diferencial">⌖</div>
+        <h3>Mais contexto</h3>
+        <p>
+          Localização, imagem e histórico ajudam a compreender cada situação.
+        </p>
+      </article>
+
+      <article class="card-diferencial">
+        <div class="icone-diferencial">▥</div>
+        <h3>Mais clareza</h3>
+        <p>
+          Mapas e indicadores tornam visíveis as áreas prioritárias da cidade.
+        </p>
+      </article>
+
+    </div>
+  </div>
+</section>
+
 
     <!-- CHAMADA FINAL -->
     <section class="lp-final" id="contato">
       <div class="lp-final-conteudo">
-        <div class="lp-final-logo">🐱</div>
+        <div class="lp-final-logo">
+          <img src="/assets/logo-nekourban.png" alt="Logo NekoUrban" />
+        </div>
         <div class="lp-final-nome">NekoUrban</div>
 
         <h2>Juntos por uma cidade mais organizada</h2>
@@ -299,7 +321,10 @@
     <footer class="lp-rodape">
       <div class="lp-container rodape-grid">
         <div class="rodape-marca">
-          <strong>🐱 NekoUrban</strong>
+          <strong class="rodape-logo">
+            <img src="/assets/logo-nekourban.png" alt="" />
+            NekoUrban
+          </strong>
           <p>Conectando cidadãos e gestão urbana.</p>
         </div>
 
