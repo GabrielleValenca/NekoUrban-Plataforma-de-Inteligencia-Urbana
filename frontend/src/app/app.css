@@ -1414,3 +1414,891 @@ main.container:has(.landing) {
     grid-template-columns: 1fr;
   }
 }
+
+
+
+.campo-senha {
+  position: relative !important;
+  display: block !important;
+  width: 100%;
+}
+
+.campo-senha input {
+  display: block;
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+  padding-right: 48px !important;
+}
+
+.campo-senha .botao-senha {
+  position: absolute !important;
+  top: 50% !important;
+  right: 10px !important;
+  left: auto !important;
+  bottom: auto !important;
+  transform: translateY(-50%) !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 32px !important;
+  height: 32px !important;
+  min-height: 0 !important;
+  margin: 0 !important;
+  padding: 5px !important;
+  background: transparent !important;
+  border: none !important;
+  color: #777;
+  cursor: pointer;
+  z-index: 2;
+}
+
+.campo-senha .botao-senha svg {
+  display: block;
+  width: 21px;
+  height: 21px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+
+
+.link-recuperacao {
+  display: block;
+  width: 100%;
+  margin-top: 14px;
+  background: transparent;
+  color: #e30613;
+  border: none;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.codigo-recuperacao {
+  margin-top: 20px;
+  padding: 18px;
+  border: 1px solid #e30613;
+  border-radius: 12px;
+  background: #fff;
+  overflow-wrap: anywhere;
+}
+
+.codigo-recuperacao strong {
+  display: block;
+  margin: 12px 0;
+  font-size: 17px;
+  letter-spacing: 1px;
+  color: #e30613;
+}
+
+.mensagem-auth {
+  margin-top: 16px;
+  padding: 12px;
+  border-radius: 8px;
+  background: #f1f1f1;
+  color: #222;
+}
+
+
+/* ==========================================
+   LOGIN E CADASTRO - IDENTIDADE NEKOURBAN
+   ========================================== */
+
+/* Fundo e composição */
+.layout {
+  position: relative;
+  isolation: isolate;
+  grid-template-columns: 1.05fr 0.95fr;
+  gap: 70px;
+  min-height: calc(100vh - 150px);
+  padding: 65px 35px;
+  background:
+    radial-gradient(circle at 8% 15%, #dcebd3 0, transparent 32%),
+    linear-gradient(125deg, #ffffff 10%, #f5f8f1 55%, #e4f0df 100%);
+  border-radius: 0 0 28px 28px;
+}
+
+/* Apresentação */
+.layout .apresentacao {
+  position: relative;
+  max-width: 560px;
+  padding: 35px 10px;
+}
+
+.layout .apresentacao::before {
+  content: "NekoUrban";
+  display: block;
+  margin-bottom: 35px;
+  color: #3e8b51;
+  font-size: 17px;
+  font-weight: 800;
+  letter-spacing: 3px;
+}
+
+.layout .apresentacao .tag {
+  background: #e4efdf;
+  color: #3e8b51;
+  border: 1px solid #d3e5ce;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.layout .apresentacao h1 {
+  max-width: 550px;
+  margin: 24px 0;
+  color: #12332c;
+  font-family: 'Poppins', sans-serif;
+  font-size: clamp(38px, 4.5vw, 57px);
+  font-weight: 600;
+  line-height: 1.15;
+  letter-spacing: -1.5px;
+}
+
+.layout .apresentacao > p {
+  max-width: 470px;
+  color: #647469;
+  font-size: 17px;
+  line-height: 1.9;
+}
+
+/* Formulário */
+.layout > .painel {
+  width: 100%;
+  max-width: 480px;
+  justify-self: center;
+  padding: 42px;
+  border: 1px solid #e3ecdf;
+  border-radius: 22px;
+  background: rgba(255, 255, 255, 0.96);
+  box-shadow: 0 20px 55px rgba(18, 51, 44, 0.10);
+}
+
+.layout > .painel h2 {
+  margin: 27px 0;
+  color: #12332c;
+  font-family: 'Poppins', sans-serif;
+  font-size: 27px;
+  font-weight: 600;
+  letter-spacing: -0.5px;
+}
+
+/* Abas */
+.layout .abas {
+  gap: 10px;
+  padding: 6px;
+  border: 1px solid #e5ede1;
+  border-radius: 12px;
+  background: #f4f7f1;
+}
+
+.layout .abas button {
+  flex: 1;
+  min-height: 43px;
+  margin: 0;
+  padding: 10px;
+  border: 0;
+  border-radius: 9px;
+  background: transparent;
+  color: #647469;
+  font-size: 14px;
+  font-weight: 600;
+  transition: .2s ease;
+}
+
+.layout .abas button:hover {
+  background: #e8f0e4;
+  color: #12332c;
+}
+
+.layout .abas button.ativo {
+  background: #123d35;
+  color: white;
+  box-shadow: 0 4px 10px #12332c20;
+}
+
+/* Campos */
+.layout form {
+  gap: 10px;
+}
+
+.layout form label {
+  margin-top: 10px;
+  color: #29443a;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.layout form input,
+.layout form select {
+  min-height: 49px;
+  padding: 13px 15px;
+  border: 1px solid #dce6d9;
+  border-radius: 10px;
+  background: #fbfcfa;
+  color: #193b32;
+  font-family: 'Poppins', sans-serif;
+  font-size: 14px;
+  transition: border-color .2s, box-shadow .2s;
+}
+
+.layout form input:focus,
+.layout form select:focus {
+  outline: none;
+  border-color: #3e8b51;
+  box-shadow: 0 0 0 3px rgba(62, 139, 81, .12);
+  background: white;
+}
+
+/* Botão principal */
+.layout form > button {
+  min-height: 50px;
+  margin-top: 22px;
+  border: 1px solid #123d35;
+  border-radius: 11px;
+  background: #123d35;
+  color: white;
+  font-family: 'Poppins', sans-serif;
+  font-size: 15px;
+  font-weight: 600;
+  transition: .2s ease;
+}
+
+.layout form > button:hover:not(:disabled) {
+  transform: translateY(-2px);
+  border-color: #3e8b51;
+  background: #3e8b51;
+  box-shadow: 0 8px 18px #12332c20;
+}
+
+/* Olho dentro do campo de senha */
+.layout .campo-senha .botao-senha {
+  color: #718075;
+}
+
+.layout .campo-senha .botao-senha:hover {
+  color: #3e8b51;
+}
+
+/* Recuperação de senha */
+.layout .link-recuperacao {
+  margin-top: 16px;
+  color: #3e8b51;
+  font-size: 13px;
+  text-align: right;
+}
+
+.layout .link-recuperacao:hover {
+  color: #123d35;
+  text-decoration: underline;
+}
+
+.layout .codigo-recuperacao {
+  border-color: #c9dfc2;
+  background: #f3f8ef;
+}
+
+.layout .codigo-recuperacao strong {
+  color: #28723f;
+}
+
+.layout .mensagem-auth {
+  border: 1px solid #dce8d7;
+  background: #f2f7ef;
+  color: #29443a;
+  line-height: 1.6;
+}
+
+/* Responsividade */
+@media (max-width: 750px) {
+  .layout {
+    grid-template-columns: 1fr;
+    gap: 25px;
+    padding: 35px 18px;
+  }
+
+  .layout .apresentacao {
+    max-width: 100%;
+    padding: 10px 5px;
+  }
+
+  .layout .apresentacao::before {
+    margin-bottom: 20px;
+  }
+
+  .layout .apresentacao h1 {
+    font-size: 36px;
+  }
+
+  .layout .apresentacao > p {
+    font-size: 15px;
+  }
+
+  .layout > .painel {
+    max-width: 520px;
+    padding: 28px 22px;
+  }
+}
+
+@media (max-width: 420px) {
+  .layout > .painel {
+    padding: 23px 17px;
+  }
+
+  .layout .apresentacao h1 {
+    font-size: 31px;
+  }
+}
+
+/* LOGIN E CADASTRO - OCUPAR A TELA INTEIRA */
+
+main.container:has(.layout) {
+  width: 100%;
+  max-width: none;
+  min-height: calc(100vh - 76px);
+  margin: 0;
+  padding: 0;
+  background: linear-gradient(135deg, #f4f8f1 0%, #e8f0e4 55%, #f8faf6 100%);
+}
+
+.layout {
+  width: 100%;
+  max-width: none;
+  min-height: calc(100vh - 76px);
+  box-sizing: border-box;
+  margin: 0;
+  padding: 70px clamp(24px, 8vw, 130px);
+  grid-template-columns: 1.1fr 0.9fr;
+  gap: clamp(35px, 7vw, 110px);
+  align-items: center;
+}
+
+.layout .painel {
+  width: 100%;
+  max-width: 490px;
+  box-sizing: border-box;
+  justify-self: end;
+}
+
+@media (max-width: 800px) {
+  .layout {
+    grid-template-columns: 1fr;
+    gap: 35px;
+    padding: 45px 24px;
+  }
+
+  .layout .painel {
+    max-width: 100%;
+    justify-self: stretch;
+  }
+
+  .layout .apresentacao h1 {
+    font-size: 38px;
+  }
+}
+/* CABEÇALHO DO LOGIN E CADASTRO */
+
+.auth-header {
+  width: 100%;
+  background: #ffffff;
+  border-bottom: 1px solid #e5eee3;
+}
+
+.auth-header .topo {
+  width: 100%;
+  max-width: 100%;
+  min-height: 76px;
+  padding: 0 clamp(24px, 8vw, 130px);
+  box-sizing: border-box;
+}
+
+.auth-header .lp-logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  color: #12332c;
+  font-size: 25px;
+  font-weight: 800;
+}
+
+.auth-header .lp-logo-imagem {
+  width: 42px;
+  height: 42px;
+  object-fit: contain;
+}
+
+.auth-header .fase {
+  color: #52685b;
+}
+
+
+/* ==========================================
+   NEKOURBAN - ÁREA LOGADA
+   IDENTIDADE VISUAL DA LANDING PAGE
+   ========================================== */
+
+/* Fundo da plataforma */
+main.container:has(.area) {
+  width: 100%;
+  max-width: none;
+  min-height: calc(100vh - 76px);
+  margin: 0;
+  padding: 0;
+  background: #f7faf5;
+  font-family: 'Poppins', sans-serif;
+}
+
+/* Cabeçalho */
+.auth-header {
+  background: #ffffff;
+  border-bottom: 1px solid #e7eee5;
+  box-shadow: 0 3px 15px rgba(18, 51, 44, 0.03);
+}
+
+.auth-header .topo {
+  max-width: 1248px;
+  min-height: 90px;
+  margin: 0 auto;
+  padding: 0 32px;
+}
+
+.auth-header .lp-logo {
+  font-family: 'Poppins', sans-serif;
+  font-size: 30px;
+}
+
+.auth-header .lp-logo-imagem {
+  width: 46px;
+  height: 46px;
+}
+
+.auth-header .fase {
+  color: #718075;
+  font-size: 13px;
+}
+
+/* Conteúdo central */
+.area {
+  width: min(1248px, calc(100% - 64px));
+  margin: 0 auto;
+  padding: 55px 0 80px;
+  color: #12332c;
+  font-family: 'Poppins', sans-serif;
+}
+
+/* Apresentação do usuário */
+.area-topo {
+  align-items: center;
+  padding: 35px;
+  border: 1px solid #e3ecdf;
+  border-radius: 22px;
+  background: linear-gradient(115deg, #ffffff 5%, #f0f7ec 100%);
+  box-shadow: 0 8px 28px rgba(18, 51, 44, 0.05);
+}
+
+.area-topo .tag {
+  background: #e4f0df;
+  color: #3e8b51;
+  border: 1px solid #d3e5ce;
+  font-family: 'Poppins', sans-serif;
+}
+
+.area h1 {
+  color: #12332c;
+  font-family: 'Poppins', sans-serif;
+  font-size: clamp(30px, 4vw, 42px);
+  font-weight: 600;
+  letter-spacing: -1px;
+}
+
+.area-topo p {
+  color: #647469;
+  font-size: 15px;
+}
+
+/* Botões do cabeçalho */
+.area-topo button {
+  min-height: 45px;
+  margin: 0 0 0 8px;
+  padding: 11px 20px;
+  border: 1px solid #123d35;
+  border-radius: 12px;
+  background: #123d35;
+  color: white;
+  font-family: 'Poppins', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  transition: .2s ease;
+}
+
+.area-topo button:hover {
+  background: #3e8b51;
+  border-color: #3e8b51;
+  transform: translateY(-2px);
+}
+
+.area-topo button.secundario {
+  border-color: #d5e3d8;
+  background: white;
+  color: #3e8b51;
+}
+
+.area-topo button.secundario:hover {
+  background: #edf5e9;
+}
+
+/* Navegação das áreas */
+.area > .abas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 30px 0 25px;
+  padding: 8px;
+  border: 1px solid #e3ecdf;
+  border-radius: 16px;
+  background: white;
+  box-shadow: 0 5px 20px rgba(18, 51, 44, 0.04);
+}
+
+.area > .abas button {
+  flex: 1 1 auto;
+  min-height: 46px;
+  margin: 0;
+  padding: 12px 17px;
+  border: 0;
+  border-radius: 11px;
+  background: transparent;
+  color: #52685b;
+  font-family: 'Poppins', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  transition: .2s ease;
+}
+
+.area > .abas button:hover {
+  background: #f0f7ec;
+  color: #3e8b51;
+}
+
+.area > .abas button.ativo {
+  background: #123d35;
+  color: white;
+  box-shadow: 0 4px 12px rgba(18, 61, 53, 0.15);
+}
+
+/* Painéis principais */
+.area > .painel {
+  margin-top: 20px;
+  padding: 32px;
+  border: 1px solid #e3ecdf;
+  border-radius: 20px;
+  background: white;
+  box-shadow: 0 8px 28px rgba(18, 51, 44, 0.05);
+}
+
+.area .painel h2 {
+  margin: 0 0 18px;
+  color: #12332c;
+  font-family: 'Poppins', sans-serif;
+  font-size: 25px;
+  font-weight: 600;
+}
+
+.area .painel > p {
+  color: #647469;
+  font-size: 14px;
+}
+
+/* Filtros */
+.area .filtros {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr auto;
+  gap: 12px;
+  margin: 25px 0;
+}
+
+.area .filtros input,
+.area .filtros select {
+  min-width: 0;
+  min-height: 46px;
+  border: 1px solid #dce6d9;
+  border-radius: 11px;
+  background: #fbfcfa;
+  color: #29443a;
+  font-family: 'Poppins', sans-serif;
+  font-size: 13px;
+}
+
+.area .filtros input:focus,
+.area .filtros select:focus {
+  outline: none;
+  border-color: #3e8b51;
+  box-shadow: 0 0 0 3px rgba(62, 139, 81, .10);
+}
+
+/* Botões gerais da área logada */
+.area .painel button,
+.area .acoes-ocorrencia button {
+  min-height: 40px;
+  margin-top: 8px;
+  padding: 10px 16px;
+  border: 1px solid #123d35;
+  border-radius: 10px;
+  background: #123d35;
+  color: white;
+  font-family: 'Poppins', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  transition: .2s ease;
+}
+
+.area .painel button:hover,
+.area .acoes-ocorrencia button:hover {
+  background: #3e8b51;
+  border-color: #3e8b51;
+}
+
+.area .painel button.secundario,
+.area .acoes-ocorrencia button.secundario {
+  border-color: #d5e3d8;
+  background: white;
+  color: #3e8b51;
+}
+
+.area .painel button.secundario:hover,
+.area .acoes-ocorrencia button.secundario:hover {
+  background: #edf5e9;
+}
+
+/* Cartões de ocorrências */
+.area .cartoes {
+  grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+  gap: 20px;
+  margin-top: 25px;
+}
+
+.area .ocorrencia {
+  padding: 22px;
+  border: 1px solid #e3ecdf;
+  border-radius: 16px;
+  background: #ffffff;
+  box-shadow: 0 5px 18px rgba(18, 51, 44, 0.04);
+  transition: transform .2s, box-shadow .2s;
+}
+
+.area .ocorrencia:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 28px rgba(18, 51, 44, 0.08);
+}
+
+.area .ocorrencia strong {
+  color: #12332c;
+}
+
+.area .ocorrencia p {
+  color: #52685b;
+  font-size: 14px;
+}
+
+.area .status {
+  padding: 6px 11px;
+  border-radius: 30px;
+  background: #e4f0df;
+  color: #3e8b51;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: capitalize;
+}
+
+.area .suave,
+.area .ocorrencia small {
+  color: #829084;
+  font-size: 12px;
+}
+
+/* Fotos das ocorrências */
+.area .foto {
+  width: 100%;
+  max-height: 220px;
+  margin-top: 12px;
+  border-radius: 12px;
+  object-fit: cover;
+}
+
+/* Comentários */
+.area .comentarios {
+  padding: 18px;
+  border: 1px solid #e3ecdf;
+  border-radius: 14px;
+  background: #f5f8f2;
+}
+
+.area .comentarios h3 {
+  color: #12332c;
+  font-family: 'Poppins', sans-serif;
+}
+
+.area .comentarios p {
+  padding-bottom: 10px;
+  border-bottom: 1px solid #e3ecdf;
+}
+
+/* Formulários da área logada */
+.area .painel form {
+  margin-top: 20px;
+  gap: 12px;
+}
+
+.area .painel form label,
+.area .acoes-ocorrencia label {
+  color: #29443a;
+  font-family: 'Poppins', sans-serif;
+  font-size: 13px;
+}
+
+.area .painel form input,
+.area .painel form select,
+.area .painel form textarea,
+.area .comentarios textarea,
+.area .acoes-ocorrencia select {
+  box-sizing: border-box;
+  border: 1px solid #dce6d9;
+  border-radius: 10px;
+  background: #fbfcfa;
+  color: #193b32;
+  font-family: 'Poppins', sans-serif;
+  font-size: 14px;
+}
+
+.area .painel form input:focus,
+.area .painel form select:focus,
+.area .painel form textarea:focus,
+.area .comentarios textarea:focus {
+  outline: none;
+  border-color: #3e8b51;
+  box-shadow: 0 0 0 3px rgba(62, 139, 81, .10);
+}
+
+/* Código de recuperação */
+.area .codigo-recuperacao {
+  border: 1px solid #c9dfc2;
+  border-radius: 16px;
+  background: #f2f7ef;
+}
+
+.area .codigo-recuperacao h3 {
+  color: #12332c;
+  font-family: 'Poppins', sans-serif;
+}
+
+.area .codigo-recuperacao strong {
+  color: #28723f;
+}
+
+/* Mapa */
+.area app-mapa {
+  display: block;
+  width: 100%;
+  margin: 20px 0;
+  overflow: hidden;
+  border: 1px solid #e3ecdf;
+  border-radius: 16px;
+  background: #f5f8f2;
+}
+
+/* Rodapé da plataforma */
+main.container:has(.area) + footer {
+  width: min(1248px, calc(100% - 64px));
+  margin: 0 auto;
+  padding: 25px 0;
+  border-top: 1px solid #e3ecdf;
+  color: #718075;
+  font-family: 'Poppins', sans-serif;
+}
+
+/* Responsividade */
+@media (max-width: 850px) {
+  .area {
+    width: calc(100% - 40px);
+    padding-top: 35px;
+  }
+
+  .area-topo {
+    flex-wrap: wrap;
+    padding: 25px;
+  }
+
+  .area .filtros {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .area > .abas button {
+    flex: 1 1 180px;
+  }
+}
+
+@media (max-width: 600px) {
+  .auth-header .topo {
+    padding: 0 18px;
+  }
+
+  .auth-header .lp-logo {
+    font-size: 24px;
+  }
+
+  .auth-header .lp-logo-imagem {
+    width: 38px;
+    height: 38px;
+  }
+
+  .area {
+    width: calc(100% - 28px);
+    padding: 25px 0 45px;
+  }
+
+  .area-topo {
+    padding: 22px;
+    gap: 12px;
+  }
+
+  .area-topo button {
+    margin: 5px 5px 0 0;
+  }
+
+  .area h1 {
+    font-size: 29px;
+  }
+
+  .area > .abas {
+    gap: 6px;
+    padding: 6px;
+  }
+
+  .area > .abas button {
+    flex: 1 1 100%;
+  }
+
+  .area > .painel {
+    padding: 20px 15px;
+  }
+
+  .area .filtros {
+    grid-template-columns: 1fr;
+  }
+
+  .area .cartoes {
+    grid-template-columns: 1fr;
+  }
+
+  .area .ocorrencia {
+    padding: 17px;
+  }
+
+  main.container:has(.area) + footer {
+    width: calc(100% - 28px);
+  }
+}
+

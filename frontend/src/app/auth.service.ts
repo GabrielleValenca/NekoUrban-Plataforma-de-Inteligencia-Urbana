@@ -1,33 +1,120 @@
+
 import { Injectable, inject, signal } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, tap } from 'rxjs';
-export interface Usuario { id: number; nome: string; email: string; municipioId: number; perfil: 'cidadao' | 'gestor'; }
-interface LoginResposta { token: string; usuario: Usuario; }
+
+export interface Usuario {
+  id: number;
+  nome: string;
+  email: string;
+  municipioId: number;
+  perfil: 'cidadao' | 'gestor';
+}
+
+export interface CadastroResposta {
+  mensagem: string;
+  codigoRecuperacao: string;
+  usuario: Usuario;
+}
+
+export interface RecuperacaoResposta {
+  mensagem: string;
+}
+
+interface LoginResposta {
+  token: string;
+  usuario: Usuario;
+}
+
 @Injectable({ providedIn: 'root' })
 export class AuthService {
   private http = inject(HttpClient);
-  private url = 'https://nekourban-plataforma-de-inteligencia-0vdy.onrender.com/api';
-  // Por simplicidade, token só em memória: atualizar a página exige novo login.
+
+  private url =
+    'https://nekourban-plataforma-de-inteligencia-0vdy.onrender.com/api';
+
   private token = '';
+
   usuario = signal<Usuario | null>(null);
+
   municipios(): Observable<{ id: number; nome: string; uf: string }[]> {
-    return this.http.get<{ id: number; nome: string; uf: string }[]>(`${this.url}/municipios`);
-  }
-  cadastrar(dados: { nome: string; email: string; senha: string; municipioId: number }) {
-    return this.http.post(`${this.url}/auth/cadastro`, dados);
-  }
-  entrar(email: string, senha: string) {
-    return this.http.post<LoginResposta>(`${this.url}/auth/login`, { email, senha }).pipe(
-      tap(resposta => { this.token = resposta.token; this.usuario.set(resposta.usuario); })
+    return this.http.get<{ id: number; nome: string; uf: string }[]>(
+      `${this.url}/municipios`
     );
   }
-  perfil() {
-    return this.http.get<Usuario>(`${this.url}/auth/me`, { headers: this.headers() });
+
+  cadastrar(dados: {
+    nome: string;
+    email: string;
+    senha: string;
+    municipioId: number;
+  }): Observable<CadastroResposta> {
+    return this.http.post<CadastroResposta>(
+      `${this.url}/auth/cadastro`,
+      dados
+    );
   }
-  testarGestor() {
-    return this.http.get<{ mensagem: string }>(`${this.url}/gestor/teste`, { headers: this.headers() });
+
+  entrar(email: string, senha: string): Observable<LoginResposta> {
+    return this.http
+      .post<LoginResposta>(`${this.url}/auth/login`, { email, senha })
+      .pipe(
+        tap(resposta => {
+          this.token = resposta.token;
+          this.usuario.set(resposta.usuario);
+        })
+      );
   }
-  tokenAtual() { return this.token; }
-  sair() { this.token = ''; this.usuario.set(null); }
-  private headers() { return new HttpHeaders({ Authorization: `Bearer ${this.token}` }); }
+
+  gerarCodigoRecuperacao(): Observable<{ codigoRecuperacao: string; mensagem: string }> {
+    return this.http.post<{ codigoRecuperacao: string; mensagem: string }>(
+      `${this.url}/auth/codigo-recuperacao`,
+      {},
+      { headers: this.headers() }
+    );
+  }
+
+  recuperarSenha(
+    email: string,
+    codigoRecuperacao: string,
+    novaSenha: string
+  ): Observable<RecuperacaoResposta> {
+    return this.http.post<RecuperacaoResposta>(
+      `${this.url}/auth/recuperar-senha`,
+      {
+        email,
+        codigoRecuperacao,
+        novaSenha
+      }
+    );
+  }
+
+  perfil(): Observable<Usuario> {
+    return this.http.get<Usuario>(
+      `${this.url}/auth/me`,
+      { headers: this.headers() }
+    );
+  }
+
+  testarGestor(): Observable<{ mensagem: string }> {
+    return this.http.get<{ mensagem: string }>(
+      `${this.url}/gestor/teste`,
+      { headers: this.headers() }
+    );
+  }
+
+  tokenAtual(): string {
+    return this.token;
+  }
+
+  sair(): void {
+    this.token = '';
+    this.usuario.set(null);
+  }
+
+  private headers(): HttpHeaders {
+    return new HttpHeaders({
+      Authorization: `Bearer ${this.token}`
+    });
+  }
 }

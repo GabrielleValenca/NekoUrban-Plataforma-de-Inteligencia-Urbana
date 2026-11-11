@@ -1,89 +1,296 @@
 @if (tela() !== 'inicio') {
-  <header>
-    <div class="container topo">
-      <div class="logo">🐱 Neko<span>Urban</span></div>
-      <span class="fase">MVP · Etapa 5</span>
-    </div>
-  </header>
+<header class="auth-header">
+  <div class="container topo">
+    <a href="#inicio" class="lp-logo">
+      <img src="/assets/logo-nekourban.png" alt="Símbolo do NekoUrban" class="lp-logo-imagem" />
+      <span>NekoUrban</span>
+    </a>
+
+    <span class="fase">MVP · Etapa 5</span>
+  </div>
+</header>
 }
 <main class="container">
   @if (auth.usuario(); as usuario) {
-    <section class="area"><div class="area-topo"><div><span class="tag">{{ usuario.perfil === 'gestor' ? 'Gestor' : 'Cidadão' }}</span><h1>Olá, {{ usuario.nome }}!</h1><p>Registre e acompanhe problemas urbanos do seu município.</p></div><button class="secundario" (click)="sair()">Sair</button></div>
-      <nav class="abas" aria-label="Áreas da plataforma"><button [class.ativo]="aba() === 'lista'" (click)="selecionarAba('lista')">Mapa de ocorrências</button><button [class.ativo]="aba() === 'registrar'" (click)="selecionarAba('registrar')">Registrar ocorrência</button><button [class.ativo]="aba() === 'minhas'" (click)="selecionarAba('minhas')">Minhas ocorrências</button><button [class.ativo]="aba() === 'avisos'" (click)="selecionarAba('avisos')">Notificações</button>@if(usuario.perfil === 'gestor'){<button [class.ativo]="aba() === 'gestor'" (click)="selecionarAba('gestor')">Painel do gestor</button>}</nav>
-      @if (aba() === 'gestor' && usuario.perfil === 'gestor') {<app-painel-gestor [categorias]="categorias()" />} @else if (aba() === 'avisos') {
-        <section class="painel"><h2>Notificações</h2><button (click)="carregarNotificacoes()">Atualizar avisos</button>
-        @for(n of notificacoes(); track n.id) {
-          <article class="ocorrencia"><strong>{{ n.lida ? 'Lida' : 'Nova' }} · Ocorrência #{{ n.ocorrenciaId }}</strong>
-          <p>{{ n.mensagem }}</p><small>{{ n.criadaEm | date:'dd/MM/yyyy HH:mm' }}</small>
-          @if(!n.lida){<button (click)="lerNotificacao(n.id)">Marcar como lida</button>}</article>
-        } @empty {<p>Você não tem notificações.</p>}</section>
-      } @else if (aba() === 'registrar') {
-        <section class="painel"><h2>Nova ocorrência</h2><p>Selecione o local clicando no mapa.</p>
-          <app-mapa [selecionavel]="true" (posicao)="marcarPosicao($event)" />
-          <p class="suave">Local: {{ latitude === null ? 'Ainda não selecionado' : latitude.toFixed(5) + ', ' + longitude?.toFixed(5) }}</p>
-          <form (ngSubmit)="registrar()" #registro="ngForm">
-            <label for="categoria">Categoria</label><select id="categoria" name="categoria" [(ngModel)]="categoriaId" required>@for(c of categorias(); track c.id){<option [ngValue]="c.id">{{ c.nome }}</option>}</select>
-            <label for="descricao">Descrição</label><textarea id="descricao" name="descricao" [(ngModel)]="descricao" required minlength="10" maxlength="2000" rows="4" placeholder="Descreva o problema..."></textarea>
-            <label for="bairro">Bairro (opcional)</label><input id="bairro" name="bairro" [(ngModel)]="bairro" maxlength="120" />
-            <label for="endereco">Endereço de referência (opcional)</label><input id="endereco" name="endereco" [(ngModel)]="endereco" maxlength="300" />
-            <label for="foto">Foto (opcional, até 5 MB)</label><input id="foto" type="file" accept="image/jpeg,image/png,image/webp" (change)="selecionarFoto($event)" />
-            <button [disabled]="registro.invalid || carregando() || latitude === null">{{ carregando() ? 'Enviando...' : 'Registrar ocorrência' }}</button>
-          </form>
-        </section>
-      } @else {
-        <section class="painel"><h2>{{ aba() === 'minhas' ? 'Minhas ocorrências' : 'Ocorrências no mapa' }}</h2>
-          @if (aba() === 'lista') {
-            <div class="filtros"><select aria-label="Filtrar categoria" [(ngModel)]="filtroCategoria"><option value="">Todas as categorias</option>@for(c of categorias();track c.id){<option [value]="c.id">{{ c.nome }}</option>}</select>
-            <select aria-label="Filtrar status" [(ngModel)]="filtroStatus"><option value="">Todos os status</option><option value="pendente">Pendente</option><option value="em_analise">Em análise</option><option value="em_andamento">Em andamento</option><option value="resolvida">Resolvida</option><option value="rejeitada">Rejeitada</option></select>
-            <input aria-label="Filtrar bairro" placeholder="Bairro" [(ngModel)]="filtroBairro" /><button (click)="listar()">Filtrar</button></div>
-            <app-mapa [ocorrencias]="ocorrencias()" />
-          }
-          <div class="cartoes">@for(o of (aba() === 'minhas' ? minhas() : ocorrencias()); track o.id){<article class="ocorrencia"><div class="ocorrencia-topo"><strong>#{{ o.id }} · {{ o.categoria }}</strong><span class="status">{{ o.status.replaceAll('_',' ') }}</span></div><p>{{ o.descricao }}</p><p class="suave">{{ o.bairro || o.endereco || 'Local marcado no mapa' }} · {{ o.criadaEm | date:'dd/MM/yyyy HH:mm' }}</p>@if(o.foto){<img class="foto" [src]="'https://nekourban-plataforma-de-inteligencia-0vdy.onrender.com' + o.foto" alt="Foto da ocorrência" />}<div class="acoes-ocorrencia">
+  <section class="area">
+    <div class="area-topo">
+      <div><span class="tag">{{ usuario.perfil === 'gestor' ? 'Gestor' : 'Cidadão' }}</span>
+        <h1>Olá, {{ usuario.nome }}!</h1>
+        <p>Registre e acompanhe problemas urbanos do seu município.</p>
+      </div>
+      <button class="secundario" (click)="sair()">Sair</button>
+      <button class="secundario" (click)="gerarCodigoRecuperacao()" [disabled]="carregando()">
+        Gerar código de recuperação
+      </button>
+    </div>
+
+    @if (codigoRecuperacaoGerado) {
+    <div class="codigo-recuperacao">
+      <h3>Seu código de recuperação</h3>
+      <p>Guarde este código em um local seguro.</p>
+      <strong>{{ codigoRecuperacaoGerado }}</strong>
+      <p>Ele será necessário caso precise redefinir sua senha.</p>
+    </div>
+    }
+
+    <nav class="abas" aria-label="Áreas da plataforma"><button [class.ativo]="aba() === 'lista'"
+        (click)="selecionarAba('lista')">Mapa de ocorrências</button><button [class.ativo]="aba() === 'registrar'"
+        (click)="selecionarAba('registrar')">Registrar ocorrência</button><button [class.ativo]="aba() === 'minhas'"
+        (click)="selecionarAba('minhas')">Minhas ocorrências</button><button [class.ativo]="aba() === 'avisos'"
+        (click)="selecionarAba('avisos')">Notificações</button>@if(usuario.perfil === 'gestor'){<button
+        [class.ativo]="aba() === 'gestor'" (click)="selecionarAba('gestor')">Painel do gestor</button>}</nav>
+    @if (aba() === 'gestor' && usuario.perfil === 'gestor') {<app-painel-gestor [categorias]="categorias()" />} @else if
+    (aba() === 'avisos') {
+    <section class="painel">
+      <h2>Notificações</h2><button (click)="carregarNotificacoes()">Atualizar avisos</button>
+      @for(n of notificacoes(); track n.id) {
+      <article class="ocorrencia"><strong>{{ n.lida ? 'Lida' : 'Nova' }} · Ocorrência #{{ n.ocorrenciaId }}</strong>
+        <p>{{ n.mensagem }}</p><small>{{ n.criadaEm | date:'dd/MM/yyyy HH:mm' }}</small>
+        @if(!n.lida){<button (click)="lerNotificacao(n.id)">Marcar como lida</button>}
+      </article>
+      } @empty {<p>Você não tem notificações.</p>}
+    </section>
+    } @else if (aba() === 'registrar') {
+    <section class="painel">
+      <h2>Nova ocorrência</h2>
+      <p>Selecione o local clicando no mapa.</p>
+      <app-mapa [selecionavel]="true" (posicao)="marcarPosicao($event)" />
+      <p class="suave">Local: {{ latitude === null ? 'Ainda não selecionado' : latitude.toFixed(5) + ', ' +
+        longitude?.toFixed(5) }}</p>
+      <form (ngSubmit)="registrar()" #registro="ngForm">
+        <label for="categoria">Categoria</label><select id="categoria" name="categoria" [(ngModel)]="categoriaId"
+          required>@for(c of categorias(); track c.id){<option [ngValue]="c.id">{{ c.nome }}</option>}</select>
+        <label for="descricao">Descrição</label><textarea id="descricao" name="descricao" [(ngModel)]="descricao"
+          required minlength="10" maxlength="2000" rows="4" placeholder="Descreva o problema..."></textarea>
+        <label for="bairro">Bairro (opcional)</label><input id="bairro" name="bairro" [(ngModel)]="bairro"
+          maxlength="120" />
+        <label for="endereco">Endereço de referência (opcional)</label><input id="endereco" name="endereco"
+          [(ngModel)]="endereco" maxlength="300" />
+        <label for="foto">Foto (opcional, até 5 MB)</label><input id="foto" type="file"
+          accept="image/jpeg,image/png,image/webp" (change)="selecionarFoto($event)" />
+        <button [disabled]="registro.invalid || carregando() || latitude === null">{{ carregando() ? 'Enviando...' :
+          'Registrar ocorrência' }}</button>
+      </form>
+    </section>
+    } @else {
+    <section class="painel">
+      <h2>{{ aba() === 'minhas' ? 'Minhas ocorrências' : 'Ocorrências no mapa' }}</h2>
+      @if (aba() === 'lista') {
+      <div class="filtros"><select aria-label="Filtrar categoria" [(ngModel)]="filtroCategoria">
+          <option value="">Todas as categorias</option>@for(c of categorias();track c.id){<option [value]="c.id">{{
+            c.nome }}</option>}
+        </select>
+        <select aria-label="Filtrar status" [(ngModel)]="filtroStatus">
+          <option value="">Todos os status</option>
+          <option value="pendente">Pendente</option>
+          <option value="em_analise">Em análise</option>
+          <option value="em_andamento">Em andamento</option>
+          <option value="resolvida">Resolvida</option>
+          <option value="rejeitada">Rejeitada</option>
+        </select>
+        <input aria-label="Filtrar bairro" placeholder="Bairro" [(ngModel)]="filtroBairro" /><button
+          (click)="listar()">Filtrar</button>
+      </div>
+      <app-mapa [ocorrencias]="ocorrencias()" />
+      }
+      <div class="cartoes">@for(o of (aba() === 'minhas' ? minhas() : ocorrencias()); track o.id){<article
+          class="ocorrencia">
+          <div class="ocorrencia-topo"><strong>#{{ o.id }} · {{ o.categoria }}</strong><span class="status">{{
+              o.status.replaceAll('_',' ') }}</span></div>
+          <p>{{ o.descricao }}</p>
+          <p class="suave">{{ o.bairro || o.endereco || 'Local marcado no mapa' }} · {{ o.criadaEm | date:'dd/MM/yyyy
+            HH:mm' }}</p>@if(o.foto){<img class="foto"
+            [src]="'https://nekourban-plataforma-de-inteligencia-0vdy.onrender.com' + o.foto"
+            alt="Foto da ocorrência" />}<div class="acoes-ocorrencia">
             <button (click)="apoiar(o.id)">Apoiar</button>
             <button class="secundario" (click)="removerApoio(o.id)">Retirar apoio</button>
             <button class="secundario" (click)="abrirComentarios(o.id)">Comentários</button>
           </div>
           @if(ocorrenciaAberta() === o.id) {
-            <div class="comentarios"><h3>Comentários</h3>
-            @for(c of comentarios(); track c.id){<p><strong>{{ c.autor }}:</strong> {{ c.texto }} <small>{{ c.criadoEm | date:'dd/MM/yyyy' }}</small></p>}
+          <div class="comentarios">
+            <h3>Comentários</h3>
+            @for(c of comentarios(); track c.id){<p><strong>{{ c.autor }}:</strong> {{ c.texto }} <small>{{ c.criadoEm |
+                date:'dd/MM/yyyy' }}</small></p>}
             <form (ngSubmit)="comentar(o.id)">
               <label [for]="'texto-' + o.id">Escreva seu comentário</label>
-              <textarea [id]="'texto-' + o.id" name="textoComentario" [(ngModel)]="textoComentario" minlength="2" maxlength="1000" required></textarea>
+              <textarea [id]="'texto-' + o.id" name="textoComentario" [(ngModel)]="textoComentario" minlength="2"
+                maxlength="1000" required></textarea>
               <button [disabled]="textoComentario.trim().length < 2">Publicar comentário</button>
-            </form></div>
+            </form>
+          </div>
           }
           @if(usuario.perfil === 'gestor') {
-            <div class="acoes-ocorrencia"><label [for]="'status-' + o.id">Alterar status</label>
+          <div class="acoes-ocorrencia"><label [for]="'status-' + o.id">Alterar status</label>
             <select [id]="'status-' + o.id" [(ngModel)]="statusNovo">
-              <option value="pendente">Pendente</option><option value="em_analise">Em análise</option>
-              <option value="em_andamento">Em andamento</option><option value="resolvida">Resolvida</option>
+              <option value="pendente">Pendente</option>
+              <option value="em_analise">Em análise</option>
+              <option value="em_andamento">Em andamento</option>
+              <option value="resolvida">Resolvida</option>
               <option value="rejeitada">Rejeitada</option>
-            </select><button (click)="atualizarStatus(o.id)">Salvar status</button></div>
+            </select><button (click)="atualizarStatus(o.id)">Salvar status</button>
+          </div>
           }
-          </article>} @empty {<p>Nenhuma ocorrência encontrada.</p>}</div>
-        </section>
-      }
+        </article>} @empty {<p>Nenhuma ocorrência encontrada.</p>}</div>
     </section>
-  } @else if (tela() === 'login' || tela() === 'cadastro') {
-    <div class="layout"><section class="apresentacao"><span class="tag">Projeto piloto · Sorocaba/SP</span><h1>Uma cidade melhor começa com você.</h1><p>Registre problemas urbanos e acompanhe o andamento pelo mapa.</p></section>
-    <section class="painel"><div class="abas"><button [class.ativo]="tela() === 'login'" (click)="mudarTela('login')">Entrar</button><button [class.ativo]="tela() === 'cadastro'" (click)="mudarTela('cadastro')">Criar conta</button></div><h2>{{ tela() === 'login' ? 'Acesse sua conta' : 'Cadastro de cidadão' }}</h2>
-    <form (ngSubmit)="enviar()" #form="ngForm">@if(tela() === 'cadastro'){<label for="nome">Nome</label><input id="nome" name="nome" [(ngModel)]="nome" required minlength="2" />}
-    <label for="email">E-mail</label><input id="email" type="email" name="email" [(ngModel)]="email" required email />
-    <label for="senha">Senha</label><input id="senha" type="password" name="senha" [(ngModel)]="senha" [minlength]="tela() === 'cadastro' ? 10 : 1" required />
-    @if(tela() === 'cadastro'){<label for="municipio">Município</label><select id="municipio" name="municipio" [(ngModel)]="municipioId" required>@for(m of municipios();track m.id){<option [ngValue]="m.id">{{m.nome}} - {{m.uf}}</option>}</select>}
-    <button [disabled]="form.invalid || carregando()">{{ carregando() ? 'Aguarde...' : (tela() === 'login' ? 'Entrar' : 'Criar conta') }}</button></form></section></div>
+    }
+  </section>
 
-    } @else {
+  } @else if (tela() === 'login' || tela() === 'cadastro') {
+  <div class="layout">
+    <section class="apresentacao">
+      <span class="tag">Projeto piloto · Sorocaba/SP</span>
+      <h1>Uma cidade melhor começa com você.</h1>
+      <p>Registre problemas urbanos e acompanhe o andamento pelo mapa.</p>
+    </section>
+
+    <section class="painel">
+
+      @if (!modoRecuperacao) {
+      <div class="abas">
+        <button [class.ativo]="tela() === 'login'" (click)="mudarTela('login')">Entrar</button>
+        <button [class.ativo]="tela() === 'cadastro'" (click)="mudarTela('cadastro')">Criar conta</button>
+      </div>
+
+      <h2>{{ tela() === 'login' ? 'Acesse sua conta' : 'Cadastro de cidadão' }}</h2>
+
+      <form (ngSubmit)="enviar()" #form="ngForm">
+
+        @if (tela() === 'cadastro') {
+        <label for="nome">Nome</label>
+        <input id="nome" name="nome" [(ngModel)]="nome" required minlength="2" />
+        }
+
+        <label for="email">E-mail</label>
+        <input id="email" type="email" name="email" [(ngModel)]="email" required email [class.campo-erro]="erroLogin()"
+          (ngModelChange)="erroLogin.set(false)" />
+
+        <label for="senha">Senha</label>
+        <div class="campo-senha">
+          <input id="senha" [type]="mostrarSenha ? 'text' : 'password'" name="senha" [(ngModel)]="senha"
+            [minlength]="tela() === 'cadastro' ? 10 : 1" required [class.campo-erro]="erroLogin()"
+            (ngModelChange)="erroLogin.set(false)" />
+          <button type="button" class="botao-senha" (click)="mostrarSenha = !mostrarSenha"
+            [attr.aria-label]="mostrarSenha ? 'Ocultar senha' : 'Mostrar senha'">
+            @if (mostrarSenha) {
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path
+                d="M3 3l18 18M10.6 10.6a2 2 0 002.8 2.8M9.9 5.2A10.8 10.8 0 0112 5c5 0 9 7 9 7a15 15 0 01-3.1 3.8M6.2 6.2C4.2 7.5 3 10 3 12c0 0 4 7 9 7 1 0 2-.2 2.9-.6" />
+            </svg>
+            } @else {
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12z" />
+              <circle cx="12" cy="12" r="3" />
+            </svg>
+            }
+          </button>
+        </div>
+
+        @if (tela() === 'cadastro') {
+        <label for="municipio">Município</label>
+        <select id="municipio" name="municipio" [(ngModel)]="municipioId" required>
+          @for (m of municipios(); track m.id) {
+          <option [ngValue]="m.id">{{ m.nome }} - {{ m.uf }}</option>
+          }
+        </select>
+        }
+
+        <button [disabled]="form.invalid || carregando()">
+          {{ carregando() ? 'Aguarde...' : (tela() === 'login' ? 'Entrar' : 'Criar conta') }}
+        </button>
+      </form>
+
+      @if (tela() === 'login') {
+      <button type="button" class="link-recuperacao" (click)="modoRecuperacao = true; mensagem.set('')">
+        Esqueci minha senha
+      </button>
+      }
+
+      @if (codigoRecuperacaoGerado) {
+      <div class="codigo-recuperacao">
+        <h3>Seu código de recuperação</h3>
+        <p>Guarde este código em um local seguro. Ele será necessário para redefinir sua senha.</p>
+        <strong>{{ codigoRecuperacaoGerado }}</strong>
+        <p>Não compartilhe este código com outras pessoas.</p>
+      </div>
+      }
+
+      } @else {
+      <h2>Recuperar senha</h2>
+      <p>Informe seu e-mail, seu código de recuperação e escolha uma nova senha.</p>
+
+      <form (ngSubmit)="recuperarSenha()" #recuperacao="ngForm">
+
+        <label for="emailRecuperacao">E-mail da conta</label>
+        <input id="emailRecuperacao" type="email" name="emailRecuperacao" [(ngModel)]="email" required email />
+
+        <label for="codigoRecuperacao">Código de recuperação</label>
+        <input id="codigoRecuperacao" name="codigoRecuperacao" [(ngModel)]="codigoRecuperacao" required />
+
+        <label for="novaSenha">Nova senha</label>
+        <div class="campo-senha">
+          <input id="novaSenha" [type]="mostrarNovaSenha ? 'text' : 'password'" name="novaSenha" [(ngModel)]="novaSenha"
+            minlength="10" required />
+          <button type="button" class="botao-senha" (click)="mostrarSenha = !mostrarSenha"
+            [attr.aria-label]="mostrarSenha ? 'Ocultar senha' : 'Mostrar senha'">
+            @if (mostrarSenha) {
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path
+                d="M3 3l18 18M10.6 10.6a2 2 0 002.8 2.8M9.9 5.2A10.8 10.8 0 0112 5c5 0 9 7 9 7a15 15 0 01-3.1 3.8M6.2 6.2C4.2 7.5 3 10 3 12c0 0 4 7 9 7 1 0 2-.2 2.9-.6" />
+            </svg>
+            } @else {
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12z" />
+              <circle cx="12" cy="12" r="3" />
+            </svg>
+            }
+          </button>
+        </div>
+
+        <label for="confirmarNovaSenha">Confirmar nova senha</label>
+        <div class="campo-senha">
+          <input id="confirmarNovaSenha" [type]="mostrarConfirmacaoSenha ? 'text' : 'password'"
+            name="confirmarNovaSenha" [(ngModel)]="confirmarNovaSenha" minlength="10" required />
+          <button type="button" class="botao-senha" (click)="mostrarSenha = !mostrarSenha"
+            [attr.aria-label]="mostrarSenha ? 'Ocultar senha' : 'Mostrar senha'">
+            @if (mostrarSenha) {
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path
+                d="M3 3l18 18M10.6 10.6a2 2 0 002.8 2.8M9.9 5.2A10.8 10.8 0 0112 5c5 0 9 7 9 7a15 15 0 01-3.1 3.8M6.2 6.2C4.2 7.5 3 10 3 12c0 0 4 7 9 7 1 0 2-.2 2.9-.6" />
+            </svg>
+            } @else {
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12z" />
+              <circle cx="12" cy="12" r="3" />
+            </svg>
+            }
+          </button>
+        </div>
+
+        <button [disabled]="recuperacao.invalid || carregando()">
+          {{ carregando() ? 'Aguarde...' : 'Redefinir senha' }}
+        </button>
+      </form>
+
+      <button type="button" class="link-recuperacao" (click)="modoRecuperacao = false; mensagem.set('')">
+        Voltar para o login
+      </button>
+      }
+
+      @if (mensagem()) {
+      <p class="mensagem-auth" role="status">{{ mensagem() }}</p>
+      }
+
+    </section>
+  </div>
+
+
+  } @else {
   <section class="landing">
 
     <!-- MENU -->
     <nav class="landing-nav">
       <a href="#inicio" class="lp-logo">
-        <img
-          src="/assets/logo-nekourban.png"
-          alt="Símbolo do NekoUrban"
-          class="lp-logo-imagem"
-        />
+        <img src="/assets/logo-nekourban.png" alt="Símbolo do NekoUrban" class="lp-logo-imagem" />
         <span>NekoUrban</span>
       </a>
 
@@ -122,13 +329,9 @@
           </button>
         </div>
 
-      <div class="hero-imagem">
-        <img
-          src="/assets/home-comunidade.png"
-          alt="Pessoas contemplando uma cidade arborizada"
-          class="imagem-home"
-        />
-      </div>
+        <div class="hero-imagem">
+          <img src="/assets/home-comunidade.png" alt="Pessoas contemplando uma cidade arborizada" class="imagem-home" />
+        </div>
       </div>
     </section>
 
@@ -157,11 +360,8 @@
         </div>
 
         <div class="sobre-imagem">
-        <img
-          src="/assets/sobre-mapa.png"
-          alt="Notebook exibindo o mapa urbano de Sorocaba"
-        />
-      </div>
+          <img src="/assets/sobre-mapa.png" alt="Notebook exibindo o mapa urbano de Sorocaba" />
+        </div>
       </div>
     </section>
 
@@ -242,63 +442,61 @@
     </section>
 
     <!-- DIFERENCIAIS -->
-    
-<section class="lp-secao diferenciais" id="diferenciais">
-  <div class="lp-container">
 
-    <span class="lp-etiqueta">03 / O DIFERENCIAL DA SOLUÇÃO</span>
+    <section class="lp-secao diferenciais" id="diferenciais">
+      <div class="lp-container">
 
-    <div class="diferenciais-layout">
+        <span class="lp-etiqueta">03 / O DIFERENCIAL DA SOLUÇÃO</span>
 
-      <div class="diferenciais-texto">
-        <h2>Mais do que registrar é enxergar a cidade.</h2>
+        <div class="diferenciais-layout">
 
-        <p class="diferenciais-intro">
-          Em vez de registros isolados, o NekoUrban organiza as ocorrências
-          para revelar onde os problemas se repetem, quais regiões exigem
-          mais atenção e como essas informações podem apoiar decisões
-          de manutenção urbana.
-        </p>
+          <div class="diferenciais-texto">
+            <h2>Mais do que registrar é enxergar a cidade.</h2>
+
+            <p class="diferenciais-intro">
+              Em vez de registros isolados, o NekoUrban organiza as ocorrências
+              para revelar onde os problemas se repetem, quais regiões exigem
+              mais atenção e como essas informações podem apoiar decisões
+              de manutenção urbana.
+            </p>
+          </div>
+
+          <div class="diferencial-imagem">
+            <img src="/assets/diferencial-painel.png"
+              alt="Painel de inteligência urbana com mapa, indicadores e regiões prioritárias" />
+          </div>
+
+        </div>
+
+        <div class="cards-diferenciais">
+
+          <article class="card-diferencial">
+            <div class="icone-diferencial">▤</div>
+            <h3>Menos duplicidade</h3>
+            <p>
+              Ocorrências semelhantes podem ser apoiadas em vez de repetidas.
+            </p>
+          </article>
+
+          <article class="card-diferencial">
+            <div class="icone-diferencial">⌖</div>
+            <h3>Mais contexto</h3>
+            <p>
+              Localização, imagem e histórico ajudam a compreender cada situação.
+            </p>
+          </article>
+
+          <article class="card-diferencial">
+            <div class="icone-diferencial">▥</div>
+            <h3>Mais clareza</h3>
+            <p>
+              Mapas e indicadores tornam visíveis as áreas prioritárias da cidade.
+            </p>
+          </article>
+
+        </div>
       </div>
-
-      <div class="diferencial-imagem">
-        <img
-          src="/assets/diferencial-painel.png"
-          alt="Painel de inteligência urbana com mapa, indicadores e regiões prioritárias"
-        />
-      </div>
-
-    </div>
-
-    <div class="cards-diferenciais">
-
-      <article class="card-diferencial">
-        <div class="icone-diferencial">▤</div>
-        <h3>Menos duplicidade</h3>
-        <p>
-          Ocorrências semelhantes podem ser apoiadas em vez de repetidas.
-        </p>
-      </article>
-
-      <article class="card-diferencial">
-        <div class="icone-diferencial">⌖</div>
-        <h3>Mais contexto</h3>
-        <p>
-          Localização, imagem e histórico ajudam a compreender cada situação.
-        </p>
-      </article>
-
-      <article class="card-diferencial">
-        <div class="icone-diferencial">▥</div>
-        <h3>Mais clareza</h3>
-        <p>
-          Mapas e indicadores tornam visíveis as áreas prioritárias da cidade.
-        </p>
-      </article>
-
-    </div>
-  </div>
-</section>
+    </section>
 
 
     <!-- CHAMADA FINAL -->
@@ -351,9 +549,9 @@
     </footer>
 
   </section>
-}
-@if (tela() !== 'inicio') {
+  }
+  @if (tela() !== 'inicio') {
   <footer class="container">
     NekoUrban · Projeto acadêmico · Etapa 5
   </footer>
-}
+  }

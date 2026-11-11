@@ -1,8 +1,8 @@
-
 import { Component, inject, signal, OnInit } from '@angular/core';
 import { DatePipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { AuthService } from './auth.service';
+import { AuthService, type CadastroResposta } from './auth.service';
+import { Observable } from 'rxjs';
 import {
   OcorrenciasService,
   type Categoria,
@@ -59,6 +59,19 @@ export class App implements OnInit {
   nome = '';
   email = '';
   senha = '';
+  // Mostrar ou ocultar senhas
+  mostrarSenha = false;
+  mostrarNovaSenha = false;
+  mostrarConfirmacaoSenha = false;
+
+  // Recuperação de senha
+  modoRecuperacao = false;
+  codigoRecuperacao = '';
+  novaSenha = '';
+  confirmarNovaSenha = '';
+
+  // Código gerado no cadastro ou solicitado pelo usuário
+  codigoRecuperacaoGerado = '';
   municipioId = 0;
 
   // Campos de ocorrência
@@ -153,27 +166,37 @@ export class App implements OnInit {
   }
 
   // Login e cadastro
+
   enviar(): void {
     this.mensagem.set('');
+    this.erroLogin.set(false);
     this.carregando.set(true);
 
-    const pedido = this.tela() === 'cadastro'
+    const ehCadastro = this.tela() === 'cadastro';
+
+    const pedido: Observable<unknown> = ehCadastro
       ? this.auth.cadastrar({
-          nome: this.nome,
-          email: this.email,
-          senha: this.senha,
-          municipioId: Number(this.municipioId)
-        })
+        nome: this.nome,
+        email: this.email,
+        senha: this.senha,
+        municipioId: Number(this.municipioId)
+      })
       : this.auth.entrar(this.email, this.senha);
 
     pedido.subscribe({
-      next: () => {
+      next: (resposta: unknown) => {
         this.carregando.set(false);
         this.senha = '';
 
-        if (this.tela() === 'cadastro') {
+        if (ehCadastro) {
+          const cadastro = resposta as CadastroResposta;
+
+          this.codigoRecuperacaoGerado = cadastro.codigoRecuperacao;
+
           this.mudarTela('login');
-          this.mensagem.set('Conta criada! Faça login.');
+          this.mensagem.set(
+            'Conta criada! Guarde seu código de recuperação antes de fazer login.'
+          );
         } else {
           this.mensagem.set('Login realizado!');
           this.listar();
@@ -182,6 +205,11 @@ export class App implements OnInit {
       },
       error: (erro: unknown) => {
         this.carregando.set(false);
+
+        if (!ehCadastro) {
+          this.erroLogin.set(true);
+        }
+
         this.mensagem.set(
           this.mensagemErro(erro, 'Erro na operação.')
         );
@@ -421,4 +449,63 @@ export class App implements OnInit {
     this.mudarTela('inicio');
     this.mensagem.set('Você saiu da conta.');
   }
+
+
+  recuperarSenha(): void {
+    this.mensagem.set('');
+
+    if (this.novaSenha.length < 10) {
+      this.mensagem.set('A nova senha precisa ter pelo menos 10 caracteres.');
+      return;
+    }
+
+    if (this.novaSenha !== this.confirmarNovaSenha) {
+      this.mensagem.set('As senhas não coincidem.');
+      return;
+    }
+
+    this.carregando.set(true);
+
+    this.auth.recuperarSenha(
+      this.email,
+      this.codigoRecuperacao,
+      this.novaSenha
+    ).subscribe({
+      next: (resposta) => {
+        this.carregando.set(false);
+        this.modoRecuperacao = false;
+        this.codigoRecuperacao = '';
+        this.novaSenha = '';
+        this.confirmarNovaSenha = '';
+        this.mensagem.set(resposta.mensagem || 'Senha redefinida! Faça login.');
+      },
+      error: (erro: unknown) => {
+        this.carregando.set(false);
+        this.mensagem.set(
+          this.mensagemErro(erro, 'Não foi possível recuperar a senha.')
+        );
+      }
+    });
+  }
+
+  gerarCodigoRecuperacao(): void {
+    this.mensagem.set('');
+    this.carregando.set(true);
+
+    this.auth.gerarCodigoRecuperacao().subscribe({
+      next: (resposta) => {
+        this.carregando.set(false);
+        this.codigoRecuperacaoGerado = resposta.codigoRecuperacao;
+        this.mensagem.set('Novo código gerado. Guarde-o em local seguro.');
+      },
+      error: (erro: unknown) => {
+        this.carregando.set(false);
+        this.mensagem.set(
+          this.mensagemErro(erro, 'Não foi possível gerar o código.')
+        );
+      }
+    });
+  }
+  erroLogin = signal(false);
+
 }
