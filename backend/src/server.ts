@@ -11,7 +11,20 @@ import path from 'node:path';
 import { autenticar, criarToken, exigirGestor } from './auth.js';
 const app = express();
 const porta = Number(process.env.PORT) || 3000;
-app.use(cors({ origin: 'http://localhost:4200' }));
+const origensPermitidas = [
+  'http://localhost:4200',
+  'https://nekourban-plataforma-de-inteligencia-urbana.vercel.app'
+];
+
+app.use(cors({
+  origin: (origem, callback) => {
+    if (!origem || origensPermitidas.includes(origem)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Origem não permitida pelo CORS'));
+    }
+  }
+}));
 app.use(express.json({ limit: '20kb' }));
 app.use('/uploads', express.static(path.resolve('uploads')));
 app.use('/api/ocorrencias', interacoesRouter);

@@ -6,7 +6,7 @@ interface LoginResposta { token: string; usuario: Usuario; }
 @Injectable({ providedIn: 'root' })
 export class AuthService {
   private http = inject(HttpClient);
-  private url = 'http://localhost:3000/api';
+  private url = 'https://nekourban-plataforma-de-inteligencia-0vdy.onrender.com/api';
   // Por simplicidade, token só em memória: atualizar a página exige novo login.
   private token = '';
   usuario = signal<Usuario | null>(null);
