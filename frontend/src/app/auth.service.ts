@@ -31,7 +31,7 @@ export class AuthService {
   private http = inject(HttpClient);
 
   private url =
-    'https://nekourban-plataforma-de-inteligencia-0vdy.onrender.com/api';
+    'http://localhost:3000/api';
 
   private token = '';
 
@@ -74,16 +74,15 @@ export class AuthService {
     );
   }
 
+
   recuperarSenha(
     email: string,
-    codigoRecuperacao: string,
     novaSenha: string
   ): Observable<RecuperacaoResposta> {
     return this.http.post<RecuperacaoResposta>(
       `${this.url}/auth/recuperar-senha`,
       {
         email,
-        codigoRecuperacao,
         novaSenha
       }
     );

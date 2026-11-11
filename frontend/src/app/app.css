@@ -2302,3 +2302,80 @@ main.container:has(.area) + footer {
   }
 }
 
+
+/* Correção do botão de visualizar senha */
+.layout .campo-senha {
+  position: relative !important;
+  width: 100%;
+  min-width: 0;
+  overflow: visible !important;
+}
+
+.layout .campo-senha input {
+  width: 100%;
+  box-sizing: border-box;
+  padding-right: 52px !important;
+}
+
+.layout .campo-senha .botao-senha {
+  position: absolute !important;
+  top: 50% !important;
+  right: 8px !important;
+  transform: translateY(-50%) !important;
+  width: 38px !important;
+  height: 38px !important;
+  min-width: 38px !important;
+  min-height: 38px !important;
+  padding: 8px !important;
+  margin: 0 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  flex-shrink: 0 !important;
+  overflow: visible !important;
+  box-sizing: border-box !important;
+  background: transparent !important;
+  border: none !important;
+  cursor: pointer;
+  z-index: 5;
+}
+
+.layout .campo-senha .botao-senha svg {
+  width: 22px !important;
+  height: 22px !important;
+  min-width: 22px !important;
+  min-height: 22px !important;
+  flex-shrink: 0 !important;
+  overflow: visible !important;
+}
+
+
+.input-arquivo {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  overflow: hidden;
+}
+
+.botao-arquivo {
+  display: inline-block;
+  padding: 10px 10px;
+  background: #258c81;
+  color: white;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.botao-arquivo:hover {
+  background: #a1ceff;
+}
+
+.nome-arquivo {
+  display: block;
+  margin-top: 8px;
+  color: #627188;
+  font-size: 13px;
+}
+

@@ -224,41 +224,35 @@ app.post('/api/auth/codigo-recuperacao', autenticar, async (req, res) => {
 });
 
 // Redefinir senha com e-mail e código de recuperação
+
 app.post('/api/auth/recuperar-senha', async (req, res) => {
-  const { email, codigoRecuperacao, novaSenha } = req.body ?? {};
+  const { email, novaSenha } = req.body ?? {};
 
   if (
     typeof email !== 'string' ||
-    typeof codigoRecuperacao !== 'string' ||
+    !email.trim() ||
     typeof novaSenha !== 'string' ||
     novaSenha.length < 10 ||
     novaSenha.length > 72
   ) {
     res.status(400).json({
-      erro: 'Informe e-mail, código e uma nova senha de 10 a 72 caracteres.'
+      erro: 'Informe um e-mail válido e uma nova senha de 10 a 72 caracteres.'
     });
     return;
   }
 
   try {
     const resultado = await pool.query(`
-      SELECT id, codigo_recuperacao_hash
+      SELECT id
       FROM usuarios
       WHERE email = LOWER($1) AND ativo = TRUE
     `, [email.trim()]);
 
     const usuario = resultado.rows[0];
 
-    if (
-      !usuario ||
-      !usuario.codigo_recuperacao_hash ||
-      !(await bcrypt.compare(
-        codigoRecuperacao,
-        usuario.codigo_recuperacao_hash
-      ))
-    ) {
+    if (!usuario) {
       res.status(400).json({
-        erro: 'E-mail ou código de recuperação inválido.'
+        erro: 'Não foi possível redefinir a senha. Verifique o e-mail informado.'
       });
       return;
     }
@@ -275,13 +269,16 @@ app.post('/api/auth/recuperar-senha', async (req, res) => {
     res.json({
       mensagem: 'Senha redefinida com sucesso. Faça login novamente.'
     });
+
   } catch (erro) {
     console.error(erro);
+
     res.status(500).json({
       erro: 'Não foi possível redefinir a senha.'
     });
   }
 });
+
 
 // Perfil do usuário autenticado
 app.get('/api/auth/me', autenticar, async (req, res) => {

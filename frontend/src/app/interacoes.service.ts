@@ -9,7 +9,7 @@ export interface Notificacao { id: number; ocorrenciaId: number; mensagem: strin
 export class InteracoesService {
   private http = inject(HttpClient);
   private auth = inject(AuthService);
-  private base = 'https://nekourban-plataforma-de-inteligencia-0vdy.onrender.com/api';
+  private base = 'http://localhost:3000/api';
   private opcoes() { return { headers: new HttpHeaders({ Authorization: `Bearer ${this.auth.tokenAtual()}` }) }; }
   comentarios(id: number) { return this.http.get<Comentario[]>(`${this.base}/ocorrencias/${id}/comentarios`, this.opcoes()); }
   comentar(id: number, texto: string) { return this.http.post(`${this.base}/ocorrencias/${id}/comentarios`, { texto }, this.opcoes()); }

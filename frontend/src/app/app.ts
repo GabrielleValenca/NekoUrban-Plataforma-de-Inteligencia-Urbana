@@ -44,6 +44,7 @@ export class App implements OnInit {
 
   mensagem = signal('');
   carregando = signal(false);
+  erroLogin = signal(false);
 
   // Dados da aplicação
   municipios = signal<{ id: number; nome: string; uf: string }[]>([]);
@@ -84,6 +85,7 @@ export class App implements OnInit {
   longitude: number | null = null;
 
   foto: File | null = null;
+  nomeArquivo = '';
 
   // Filtros
   filtroCategoria = '';
@@ -250,7 +252,9 @@ export class App implements OnInit {
   // Seleção de foto
   selecionarFoto(evento: Event): void {
     const input = evento.target as HTMLInputElement;
+
     this.foto = input.files?.[0] ?? null;
+    this.nomeArquivo = this.foto?.name ?? '';
   }
 
   // Cadastro de ocorrência
@@ -295,6 +299,7 @@ export class App implements OnInit {
         this.endereco = '';
         this.bairro = '';
         this.foto = null;
+        this.nomeArquivo = '';
 
         this.mensagem.set(
           `Ocorrência #${resposta.id} registrada!`
@@ -451,8 +456,16 @@ export class App implements OnInit {
   }
 
 
+
+
+  // Recuperar senha
   recuperarSenha(): void {
     this.mensagem.set('');
+
+    if (!this.email.trim()) {
+      this.mensagem.set('Informe o e-mail da sua conta.');
+      return;
+    }
 
     if (this.novaSenha.length < 10) {
       this.mensagem.set('A nova senha precisa ter pelo menos 10 caracteres.');
@@ -466,18 +479,16 @@ export class App implements OnInit {
 
     this.carregando.set(true);
 
-    this.auth.recuperarSenha(
-      this.email,
-      this.codigoRecuperacao,
-      this.novaSenha
-    ).subscribe({
+    this.auth.recuperarSenha(this.email, this.novaSenha).subscribe({
       next: (resposta) => {
         this.carregando.set(false);
         this.modoRecuperacao = false;
         this.codigoRecuperacao = '';
         this.novaSenha = '';
         this.confirmarNovaSenha = '';
-        this.mensagem.set(resposta.mensagem || 'Senha redefinida! Faça login.');
+        this.mensagem.set(
+          resposta.mensagem || 'Senha redefinida! Faça login.'
+        );
       },
       error: (erro: unknown) => {
         this.carregando.set(false);
@@ -488,6 +499,7 @@ export class App implements OnInit {
     });
   }
 
+  // Gerar código de recuperação
   gerarCodigoRecuperacao(): void {
     this.mensagem.set('');
     this.carregando.set(true);
@@ -506,6 +518,5 @@ export class App implements OnInit {
       }
     });
   }
-  erroLogin = signal(false);
 
 }

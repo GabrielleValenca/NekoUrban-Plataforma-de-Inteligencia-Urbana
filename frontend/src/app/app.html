@@ -24,15 +24,6 @@
       </button>
     </div>
 
-    @if (codigoRecuperacaoGerado) {
-    <div class="codigo-recuperacao">
-      <h3>Seu código de recuperação</h3>
-      <p>Guarde este código em um local seguro.</p>
-      <strong>{{ codigoRecuperacaoGerado }}</strong>
-      <p>Ele será necessário caso precise redefinir sua senha.</p>
-    </div>
-    }
-
     <nav class="abas" aria-label="Áreas da plataforma"><button [class.ativo]="aba() === 'lista'"
         (click)="selecionarAba('lista')">Mapa de ocorrências</button><button [class.ativo]="aba() === 'registrar'"
         (click)="selecionarAba('registrar')">Registrar ocorrência</button><button [class.ativo]="aba() === 'minhas'"
@@ -66,8 +57,20 @@
           maxlength="120" />
         <label for="endereco">Endereço de referência (opcional)</label><input id="endereco" name="endereco"
           [(ngModel)]="endereco" maxlength="300" />
-        <label for="foto">Foto (opcional, até 5 MB)</label><input id="foto" type="file"
-          accept="image/jpeg,image/png,image/webp" (change)="selecionarFoto($event)" />
+
+        <label for="foto">Foto (opcional, até 5 MB)</label>
+
+        <input id="foto" type="file" accept="image/jpeg,image/png,image/webp" (change)="selecionarFoto($event)"
+          class="input-arquivo" />
+
+        <label for="foto" class="botao-arquivo">
+          Escolher arquivo
+        </label>
+
+        <span class="nome-arquivo">
+          {{ nomeArquivo || 'Nenhum arquivo selecionado' }}
+        </span>
+        
         <button [disabled]="registro.invalid || carregando() || latitude === null">{{ carregando() ? 'Enviando...' :
           'Registrar ocorrência' }}</button>
       </form>
@@ -99,8 +102,7 @@
               o.status.replaceAll('_',' ') }}</span></div>
           <p>{{ o.descricao }}</p>
           <p class="suave">{{ o.bairro || o.endereco || 'Local marcado no mapa' }} · {{ o.criadaEm | date:'dd/MM/yyyy
-            HH:mm' }}</p>@if(o.foto){<img class="foto"
-            [src]="'https://nekourban-plataforma-de-inteligencia-0vdy.onrender.com' + o.foto"
+            HH:mm' }}</p>@if(o.foto){<img class="foto" [src]="'http://localhost:3000' + o.foto"
             alt="Foto da ocorrência" />}<div class="acoes-ocorrencia">
             <button (click)="apoiar(o.id)">Apoiar</button>
             <button class="secundario" (click)="removerApoio(o.id)">Retirar apoio</button>
@@ -216,26 +218,25 @@
 
       } @else {
       <h2>Recuperar senha</h2>
-      <p>Informe seu e-mail, seu código de recuperação e escolha uma nova senha.</p>
+      <p>
+        Informe o e-mail cadastrado e escolha uma nova senha para sua conta.
+      </p>
 
       <form (ngSubmit)="recuperarSenha()" #recuperacao="ngForm">
 
         <label for="emailRecuperacao">E-mail da conta</label>
         <input id="emailRecuperacao" type="email" name="emailRecuperacao" [(ngModel)]="email" required email />
 
-        <label for="codigoRecuperacao">Código de recuperação</label>
-        <input id="codigoRecuperacao" name="codigoRecuperacao" [(ngModel)]="codigoRecuperacao" required />
-
         <label for="novaSenha">Nova senha</label>
         <div class="campo-senha">
           <input id="novaSenha" [type]="mostrarNovaSenha ? 'text' : 'password'" name="novaSenha" [(ngModel)]="novaSenha"
             minlength="10" required />
-          <button type="button" class="botao-senha" (click)="mostrarSenha = !mostrarSenha"
-            [attr.aria-label]="mostrarSenha ? 'Ocultar senha' : 'Mostrar senha'">
-            @if (mostrarSenha) {
+          <button type="button" class="botao-senha" (click)="mostrarNovaSenha = !mostrarNovaSenha"
+            [attr.aria-label]="mostrarNovaSenha ? 'Ocultar senha' : 'Mostrar senha'">
+            @if (mostrarNovaSenha) {
             <svg viewBox="0 0 24 24" aria-hidden="true">
               <path
-                d="M3 3l18 18M10.6 10.6a2 2 0 002.8 2.8M9.9 5.2A10.8 10.8 0 0112 5c5 0 9 7 9 7a15 15 0 01-3.1 3.8M6.2 6.2C4.2 7.5 3 10 3 12c0 0 4 7 9 7 1 0 2-.2 2.9-.6" />
+                d="M3 3l18 18M10.6 10.6a2 2 0 002.8 2.8M9.9 5.2A10.8 10.8 0 0112 5c5 0 9 7 9 7s-4 7-9 7c-1 0-2-.2-2.9-.6" />
             </svg>
             } @else {
             <svg viewBox="0 0 24 24" aria-hidden="true">
@@ -250,12 +251,12 @@
         <div class="campo-senha">
           <input id="confirmarNovaSenha" [type]="mostrarConfirmacaoSenha ? 'text' : 'password'"
             name="confirmarNovaSenha" [(ngModel)]="confirmarNovaSenha" minlength="10" required />
-          <button type="button" class="botao-senha" (click)="mostrarSenha = !mostrarSenha"
-            [attr.aria-label]="mostrarSenha ? 'Ocultar senha' : 'Mostrar senha'">
-            @if (mostrarSenha) {
+          <button type="button" class="botao-senha" (click)="mostrarConfirmacaoSenha = !mostrarConfirmacaoSenha"
+            [attr.aria-label]="mostrarConfirmacaoSenha ? 'Ocultar senha' : 'Mostrar senha'">
+            @if (mostrarConfirmacaoSenha) {
             <svg viewBox="0 0 24 24" aria-hidden="true">
               <path
-                d="M3 3l18 18M10.6 10.6a2 2 0 002.8 2.8M9.9 5.2A10.8 10.8 0 0112 5c5 0 9 7 9 7a15 15 0 01-3.1 3.8M6.2 6.2C4.2 7.5 3 10 3 12c0 0 4 7 9 7 1 0 2-.2 2.9-.6" />
+                d="M3 3l18 18M10.6 10.6a2 2 0 002.8 2.8M9.9 5.2A10.8 10.8 0 0112 5c5 0 9 7 9 7s-4 7-9 7c-1 0-2-.2-2.9-.6" />
             </svg>
             } @else {
             <svg viewBox="0 0 24 24" aria-hidden="true">
