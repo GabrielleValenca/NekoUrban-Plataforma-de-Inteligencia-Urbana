@@ -17,7 +17,7 @@ export interface FiltrosGestor { categoriaId: string; status: string; bairro: st
 export class GestorService {
   private http = inject(HttpClient);
   private auth = inject(AuthService);
-  private base = 'http://localhost:3000/api/gestor';
+  private base = 'https://nekourban-plataforma-de-inteligencia-0vdy.onrender.com/api/gestor';
   private opcoes(f: FiltrosGestor) {
     let params = new HttpParams();
     for (const [chave, valor] of Object.entries(f)) if (valor) params = params.set(chave, valor);

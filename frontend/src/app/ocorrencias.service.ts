@@ -13,7 +13,7 @@ export interface Ocorrencia {
 export class OcorrenciasService {
   private http = inject(HttpClient);
   private auth = inject(AuthService);
-  private url = 'http://localhost:3000/api';
+  private url = 'https://nekourban-plataforma-de-inteligencia-0vdy.onrender.com/api';
   categorias() { return this.http.get<Categoria[]>(`${this.url}/categorias`); }
   listar(filtros: { categoriaId?: string; status?: string; bairro?: string }) {
     let params = new HttpParams();

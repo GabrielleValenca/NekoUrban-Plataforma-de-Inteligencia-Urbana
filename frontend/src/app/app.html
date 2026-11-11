@@ -38,7 +38,7 @@
             <input aria-label="Filtrar bairro" placeholder="Bairro" [(ngModel)]="filtroBairro" /><button (click)="listar()">Filtrar</button></div>
             <app-mapa [ocorrencias]="ocorrencias()" />
           }
-          <div class="cartoes">@for(o of (aba() === 'minhas' ? minhas() : ocorrencias()); track o.id){<article class="ocorrencia"><div class="ocorrencia-topo"><strong>#{{ o.id }} · {{ o.categoria }}</strong><span class="status">{{ o.status.replaceAll('_',' ') }}</span></div><p>{{ o.descricao }}</p><p class="suave">{{ o.bairro || o.endereco || 'Local marcado no mapa' }} · {{ o.criadaEm | date:'dd/MM/yyyy HH:mm' }}</p>@if(o.foto){<img class="foto" [src]="'http://localhost:3000' + o.foto" alt="Foto da ocorrência" />}<div class="acoes-ocorrencia">
+          <div class="cartoes">@for(o of (aba() === 'minhas' ? minhas() : ocorrencias()); track o.id){<article class="ocorrencia"><div class="ocorrencia-topo"><strong>#{{ o.id }} · {{ o.categoria }}</strong><span class="status">{{ o.status.replaceAll('_',' ') }}</span></div><p>{{ o.descricao }}</p><p class="suave">{{ o.bairro || o.endereco || 'Local marcado no mapa' }} · {{ o.criadaEm | date:'dd/MM/yyyy HH:mm' }}</p>@if(o.foto){<img class="foto" [src]="'https://nekourban-plataforma-de-inteligencia-0vdy.onrender.com' + o.foto" alt="Foto da ocorrência" />}<div class="acoes-ocorrencia">
             <button (click)="apoiar(o.id)">Apoiar</button>
             <button class="secundario" (click)="removerApoio(o.id)">Retirar apoio</button>
             <button class="secundario" (click)="abrirComentarios(o.id)">Comentários</button>
