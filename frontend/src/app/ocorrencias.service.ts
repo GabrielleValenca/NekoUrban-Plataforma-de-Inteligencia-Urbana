@@ -1,6 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { AuthService } from './auth.service';
+import { API_URL } from './api-url';
 
 export interface Categoria { id: number; nome: string; }
 export interface Ocorrencia {
@@ -13,7 +14,7 @@ export interface Ocorrencia {
 export class OcorrenciasService {
   private http = inject(HttpClient);
   private auth = inject(AuthService);
-  private url = 'http://localhost:3000/api';
+  private url = API_URL;
   categorias() { return this.http.get<Categoria[]>(`${this.url}/categorias`); }
   listar(filtros: { categoriaId?: string; status?: string; bairro?: string }) {
     let params = new HttpParams();

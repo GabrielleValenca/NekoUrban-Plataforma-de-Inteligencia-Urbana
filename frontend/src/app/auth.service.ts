@@ -1,4 +1,4 @@
-
+import { API_URL } from './api-url';
 import { Injectable, inject, signal } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, tap } from 'rxjs';
@@ -30,8 +30,7 @@ interface LoginResposta {
 export class AuthService {
   private http = inject(HttpClient);
 
-  private url =
-    'http://localhost:3000/api';
+  private url = API_URL;
 
   private token = '';
 

@@ -6,10 +6,17 @@
       <span>NekoUrban</span>
     </a>
 
-    <span class="fase">MVP · Etapa 5</span>
+    <div class="topo-acoes">
+      <span class="fase">MVP · Etapa 5</span>
+
+      @if (auth.usuario()) {
+        <button class="secundario" (click)="sair()">Sair</button>
+      }
+    </div>
   </div>
 </header>
 }
+
 <main class="container">
   @if (auth.usuario(); as usuario) {
   <section class="area">
@@ -18,10 +25,6 @@
         <h1>Olá, {{ usuario.nome }}!</h1>
         <p>Registre e acompanhe problemas urbanos do seu município.</p>
       </div>
-      <button class="secundario" (click)="sair()">Sair</button>
-      <button class="secundario" (click)="gerarCodigoRecuperacao()" [disabled]="carregando()">
-        Gerar código de recuperação
-      </button>
     </div>
 
     <nav class="abas" aria-label="Áreas da plataforma"><button [class.ativo]="aba() === 'lista'"
@@ -102,7 +105,7 @@
               o.status.replaceAll('_',' ') }}</span></div>
           <p>{{ o.descricao }}</p>
           <p class="suave">{{ o.bairro || o.endereco || 'Local marcado no mapa' }} · {{ o.criadaEm | date:'dd/MM/yyyy
-            HH:mm' }}</p>@if(o.foto){<img class="foto" [src]="'http://localhost:3000' + o.foto"
+            HH:mm' }}</p>@if(o.foto){<img class="foto" [src]="apiUrl + o.foto"
             alt="Foto da ocorrência" />}<div class="acoes-ocorrencia">
             <button (click)="apoiar(o.id)">Apoiar</button>
             <button class="secundario" (click)="removerApoio(o.id)">Retirar apoio</button>

@@ -1,6 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { AuthService } from './auth.service';
+import { API_URL } from './api-url';
 
 export interface Comentario { id: number; texto: string; autor: string; criadoEm: string; }
 export interface Notificacao { id: number; ocorrenciaId: number; mensagem: string; lida: boolean; criadaEm: string; }
@@ -9,7 +10,7 @@ export interface Notificacao { id: number; ocorrenciaId: number; mensagem: strin
 export class InteracoesService {
   private http = inject(HttpClient);
   private auth = inject(AuthService);
-  private base = 'http://localhost:3000/api';
+  private base = API_URL;
   private opcoes() { return { headers: new HttpHeaders({ Authorization: `Bearer ${this.auth.tokenAtual()}` }) }; }
   comentarios(id: number) { return this.http.get<Comentario[]>(`${this.base}/ocorrencias/${id}/comentarios`, this.opcoes()); }
   comentar(id: number, texto: string) { return this.http.post(`${this.base}/ocorrencias/${id}/comentarios`, { texto }, this.opcoes()); }

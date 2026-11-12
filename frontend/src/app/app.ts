@@ -3,6 +3,7 @@ import { DatePipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { AuthService, type CadastroResposta } from './auth.service';
 import { Observable } from 'rxjs';
+import { API_URL } from './api-url';
 import {
   OcorrenciasService,
   type Categoria,
@@ -518,5 +519,5 @@ export class App implements OnInit {
       }
     });
   }
-
+  apiUrl = API_URL.replace('/api', '');
 }

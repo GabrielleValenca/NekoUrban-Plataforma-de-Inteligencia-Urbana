@@ -1856,6 +1856,11 @@ main.container:has(.area) {
   background: #ffffff;
   border-bottom: 1px solid #e7eee5;
   box-shadow: 0 3px 15px rgba(18, 51, 44, 0.03);
+  .topo-acoes {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
 }
 
 .auth-header .topo {

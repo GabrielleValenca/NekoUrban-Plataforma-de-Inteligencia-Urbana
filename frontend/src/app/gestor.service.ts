@@ -1,6 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { AuthService } from './auth.service';
+import { API_URL } from './api-url';
 
 export interface Grupo { nome: string; total: number }
 export interface Ponto { id: number; latitude: number; longitude: number; status: string }
@@ -17,7 +18,7 @@ export interface FiltrosGestor { categoriaId: string; status: string; bairro: st
 export class GestorService {
   private http = inject(HttpClient);
   private auth = inject(AuthService);
-  private base = 'http://localhost:3000/api/gestor';
+  private base = API_URL;
   private opcoes(f: FiltrosGestor) {
     let params = new HttpParams();
     for (const [chave, valor] of Object.entries(f)) if (valor) params = params.set(chave, valor);
